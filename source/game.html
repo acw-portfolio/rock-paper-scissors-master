@@ -1,0 +1,60 @@
+<import url="/source/scoreboard.html">
+
+<scope component="game">
+	This is the game!
+((score))
+	<scoreboard><div slot="scored">((score))</div></scoreboard>
+
+	<scope import=pogs export=choice>
+		Please pick you item
+
+		((computer_choice))
+
+		<container>
+			((pogs))
+			<scope export="choice" pin="d">
+				<a onclick=((click))>
+					The type((type))
+				</a>
+				<script on=((click))>
+					choice = type_val;
+				</script>
+
+				<script on=((arrange))>
+					console.log(arrange)
+					arrange.trs({
+						obj:d$,
+						opacity:[{v:0,dur: 0},{delay: 150*arrange.pos.row, v:1,dur:200 }]
+					});
+				</script>
+
+				<script on=((trs_out_dn))>
+					debugger;
+				</script>
+
+			</scope>
+		</container>
+	</scope>
+
+	<script on=((loading))>
+		score = 1;
+		pogs = [{type:"rock", type_val:0},{type:"paper", type_val:1},{type:"scissors", type_val:2}]
+	</script>
+
+	<script on=((choice))>
+		
+		pogs = [];
+
+		//Calculate computer choice
+		computer_choice = Math.round(Math.random()*2);
+	</script>
+
+	<script on=((computer_choice))>
+		//Transition to result screen // then reset back to choice
+		console.log(computer_choice % 3);
+		if((computer_choice % 3) > choice){
+			console.log("You Lost");
+		}
+		console.log("You Won")
+	</script>
+</scope>
