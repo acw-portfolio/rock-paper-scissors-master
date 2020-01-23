@@ -1,0 +1,10 @@
+{
+  "name": "rock-paper-scissors-master",
+  "version": "1.0.0",
+  "description": "Rock Papers Scissors Portfolio Project",
+  "main": "index.js",
+  "repository": "ssh://git@github.com/acw-portfolio/rock-paper-scissors-master",
+  "author": "Anthony Weathersby <anthonycweathersby@gmail.com>",
+  "license": "MIT",
+  "private": true
+}
