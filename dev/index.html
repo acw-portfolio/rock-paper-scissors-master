@@ -1,45 +1,338 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
-
   <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-  
   <title>Frontend Mentor | Rock, Paper, Scissors</title>
-
+  <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed:600,700&display=swap" rel="stylesheet">
   <script type="module" src="/lantern-poll/?dev;images;source"></script> <!-- this needs to be removed for production -->
-
   <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
   <style>
-    body{
-      background-color:red;
-    }
-    .attribution { font-size: 11px; text-align: center; }
-    .attribution a { color: hsl(228, 45%, 44%); }
+  body {
+    font-family: "Barlow Semi Condensed", Arial, sans-serif;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    background-color: #15183b;
+    color: white;
+    font-size: 10px;
+    line-height: 4em;
+    font-weight: 600;
+  }
+
+  /*
+      1.0 Game
+
+      2.0 Score Board
+
+      3.0 Play Area
+
+      light-blue: 575465;
+        Score board integer
+      lightest-blue: 5A6980;
+        Score Board Border
+      deep-blue: 1e34a1;
+        Score text;
+    */
+
+
+  /*1.0 Game */
+
+
+  #game {
+    background: radial-gradient(circle, #1f3656 0%, #15183b 100%) no-repeat;
+    background-size: 100% 200%;
+    background-position: 100% 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 25% [content] 50% 25%;
+    grid-template-rows: 5% [scoreboard] 150px 8% [playarea] 300px auto;
+    justify-content: center;
+  }
+
+  /*2.0 SCORE BOARD */
+
+  .scoreboard {
+    grid-column-start: content;
+    grid-row-start: scoreboard;
+    position: relative;
+    border: 3px solid #5A6980;
+    border-radius: 15px;
+    min-height: 100px;
+    padding: 8px;
+    font-size: 1em;
+  }
+
+  .scoreboard>div {
+    top: 0;
+    bottom: 0;
+    margin: 18px;
+  }
+
+  .scoreboard #score {
+    background-color: white;
+    position: absolute;
+    right: 0px;
+    width: 150px;
+    text-align: center;
+    border-radius: 10px;
+  }
+
+  .scoreboard #score #score-text {
+    position: relative;
+    top: 4%;
+    font-size: 1.5em;
+    letter-spacing: 0.2em;
+    color: #244bff;
+  }
+
+  .scoreboard #score #score-integer {
+    font-size: 6em;
+    line-height: 0.8em;
+    font-weight: 700;
+    color: #575465;
+  }
+
+  .scoreboard #game-type {
+    margin: 12px 20px;
+    line-height: 0.8em;
+    font-size: 4.0em;
+    font-weight: 700;
+    width: 80px;
+  }
+
+  /*3.0 PLAY AREA */
+
+  .centerview {
+    position: relative;
+    left: 50%;
+    grid-column-start: content;
+    grid-row-start: playarea;
+  }
+
+  .pog-area-adjust {
+    top: 30%;
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    left: -100px;
+  }
+
+  /** showdown **/
+
+  .countdown-word {
+    font-family: Helvetica, arial, sans-serif;
+    position: absolute;
+    font-size: 20em;
+    color: white;
+    z-index: 1000;
+  }
+
+  .showdown #restart-button{
+    position: absolute;
+    width: 220px;
+    left:-110px;
+    top:80%;
+    height: 50px;
+    background-color: white;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 2em;
+    color:black;
+  }
+
+  .showdown #result-text{
+    width: 300px;
+    left: -150px;
+    position: absolute;
+    top:55%;
+    height: 50px;
+    text-align: center;
+    font-size: 6em;
+    font-weight: 700;
+  }
+
+  .showdown #identifiers{
+    position: absolute;
+    width: 600px;
+    left: -300px;
+    top:5%;
+    height: 50px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 2.5em;
+  }
+  .showdown #identifiers>div{
+    position: absolute;
+    width: 300px;
+    text-align: center;
+  }
+
+  .showdown #identifiers>div:nth-child(1){
+    left: -150px;
+  }
+
+  .showdown #identifiers>div:nth-child(2){
+    right: -150px;
+  }
+
+  /** POGS **/
+
+  .pog-landing {
+    position: absolute;
+    border-radius: 100px;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    background: #15213b;
+  }
+
+  .pog {
+    position: absolute;
+    border-radius: 100px;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+  }
+
+  .pog-base-color {
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 105%;
+    border-radius: 100%;
+  }
+
+  .pog-highlight-color {
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 70%) -10px -10px no-repeat;
+  }
+
+
+  .pog-center-shadow {
+    top: 12%;
+    left: 12%;
+    position: absolute;
+    width: 76%;
+    height: 76%;
+    background-color: #b9bed4;
+    border-radius: 100%;
+  }
+
+  .pog-center-fill {
+    bottom: 0;
+    position: absolute;
+    width: 90%;
+    height: 85%;
+    padding: 5%;
+    background-color: white;
+    border-radius: 100%;
+  }
+
+  .pog-connection-line {
+    transform-origin: 0 0;
+    position: absolute;
+    background-color: rgb(0, 0, 60);
+    top: 50%;
+    left: 50%;
+    height: 20px;
+    width: 300px;
+    z-index: -100;
+  }
+
+  .pog-svg {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+  }
+
+  .pog.scissors .pog-base-color {
+    background-color: #c76c1b;
+  }
+
+  .pog.scissors .pog-highlight-color {
+    background-color: #eb9e10;
+  }
+
+  .pog.scissors .pog-svg {
+    background-image: url(/images/icon-scissors.svg);
+  }
+
+  .pog.paper .pog-base-color {
+    background-color: #2844c2;
+  }
+
+  .pog.paper .pog-highlight-color {
+    background-color: #4564f3;
+  }
+
+  .pog.paper .pog-svg {
+    background-image: url(/images/icon-paper.svg);
+  }
+
+  .pog.rock .pog-base-color {
+    background-color: #9f1634;
+  }
+
+  .pog.rock .pog-highlight-color {
+    background-color: #dc3755;
+  }
+
+  .pog.rock .pog-svg {
+    background-image: url(/images/icon-rock.svg);
+  }
+
+  /** Attribution **/
+
+  .attribution {
+    font-size: 12px;
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    bottom: 50px
+  }
+
+  .attribution a {
+    color: hsl(228, 45%, 44%);
+  }
+
   </style>
 </head>
+
 <body>
-  Score
-  Rules
-
-  You Picked
-  The House Picked
-
-  You Wins
-  You Lose
-
-  Play Again?
-
-  
+  <div id="game"></div>
   <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
     Coded by <a href="#">AC Weathersby</a>.
   </div>
-
   <script src='cfw/wick'></script>
-  <!-- <script src='cfw/flame'></script> Some day -->
-  <script src='/source/main.js'></script>
-
+  <script>
+  const game_component = wick("/source/game.html");
+  /** Load pogs into game **/
+  const game = game_component.mount(document.getElementById("game"));
+  </script>
 </body>
+
 </html>
