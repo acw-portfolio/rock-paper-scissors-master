@@ -1,3 +1,11 @@
-<scope component="scoreboard" import="score">
-	test <slot name="scored"></slot> test
+<scope class="scoreboard" component="scoreboard" import="score">
+	
+	<div id="game-type">
+		ROCK PAPER SCISSORS
+	</div>
+
+	<div id="score">
+		<div id="score-text">SCORE</div>
+		<span id="score-integer" style=(( score < 0 ? "color:red" : ""))>((score))</span>
+	</div>
 </scope>

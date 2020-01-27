@@ -1,0 +1,74 @@
+<import url="/source/pog.html">
+
+<scope class="showdown" component="selection" export=pogchoice import=pogs>
+
+	<container element="div" class="pog-area-adjust">
+		((pogs))
+		<pog export="pogchoice" import="sizes" pin="d" onclick=((click))>
+
+			<div class="pog-connection-line" pin=cl > </div>
+
+			<script on=((click))>
+				pogchoice = { type, x, y, type_id  };
+				this.CHOSEN = true;
+			</script>
+
+			<script on=((loading))>
+				d$.style.opacity = 0;
+			</script>
+
+			<script on=((arrange))>
+				const angle = (Math.PI * 2 / 3) * pos.row;
+				const val = angle + Math.PI,
+					d = 160,
+					d1 = d *0.8,
+					d2 = d *0.4,
+					px = Math.round(d2 * Math.sin(val - 1.2) * 10000) / 10000,
+					py = Math.round(d2 * -Math.cos(val - 1.2) * 10000) / 10000,
+					p1x = Math.round(d1 * Math.sin(val - 0.8) * 10000) / 10000,
+					p1y = Math.round(d1 * -Math.cos(val - 0.8) * 10000) / 10000,
+					p2x = Math.round(d * Math.sin(val) * 10000) / 10000,
+					p2y = Math.round(d * -Math.cos(val) * 10000) / 10000;
+					const t = angle + (Math.PI / 3)* (pos.row + 1) * 2;
+					index = t * 180 / Math.PI;
+				x = p2x;
+				y = p2y;
+
+				const delay = 300 + 100 * pos.row;
+
+				trs({
+					obj: d$,
+					opacity: [{ v: 0 }, { delay: delay, v: 1, dur: 200 }],
+					transform: [
+						{ delay, v: "translate(0px, 50px) scale(0.5)", dur: 0 },
+						{ v: `translate(${px}px, ${py}px)scale(0.5)`, dur: 50, easing: glow.linear },
+						{ v: `translate(${p1x}px, ${p1y}px)  scale(0.6)`, dur: 75, easing: glow.linear },
+						{ v: `translate(${p2x}px, ${p2y}px)  scale(1)`, dur: 500, easing: glow.ease_out }
+								]
+				},{
+					obj: cl$,
+					transform: [
+						{ v: `rotate(0)`, dur: 0},
+						{ v: `rotate(${t}})`, dur: 600, easing: glow.linear }
+					]
+				});
+			</script>
+			<script on=((trs_out))>
+			if (this.CHOSEN) {
+				this.CHOSEN = false;
+				trs({
+					obj: d$,					
+					opacity: [{ v: 0, dur: 5, delay:40 }],
+				})
+			} else {
+
+				trs({
+					obj: d$,
+					transform: { v: "translate(0px, 50px) scale(0.2)", dur: 300 },
+					opacity: [{ v: 0, dur: 300 }],
+				});
+			}
+			</script>
+		</pog>
+	</container>
+</scope>
