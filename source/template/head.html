@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
   <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
   <title>Frontend Mentor | Rock, Paper, Scissors</title>
   <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed:600,700&display=swap" rel="stylesheet">
-  <script type="module" src="/lantern-poll/?dev;images;source"></script> <!-- this needs to be removed for production -->
+  <script src="/js/wick.lite.js"></script> <!-- this needs to be removed for production -->
   <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
   <style>
   body {
@@ -139,71 +136,53 @@
     z-index: 1000;
   }
 
-  .showdown #restart-button{
+  .showdown #restart-button {
     position: absolute;
     width: 220px;
-    left:-110px;
-    top:80%;
+    left: -110px;
+    top: 80%;
     height: 50px;
     background-color: white;
     border-radius: 8px;
     text-align: center;
     font-size: 2em;
-    color:black;
+    color: black;
   }
 
-  .showdown #result-text{
+  .showdown #result-text {
     width: 300px;
     left: -150px;
     position: absolute;
-    top:55%;
+    top: 55%;
     height: 50px;
     text-align: center;
     font-size: 6em;
     font-weight: 700;
   }
 
-  .showdown #identifiers{
+  .showdown #identifiers {
     position: absolute;
     width: 600px;
     left: -300px;
-    top:5%;
+    top: 5%;
     height: 50px;
     text-align: center;
     font-weight: 700;
     font-size: 2.5em;
   }
-  .showdown #identifiers>div{
+
+  .showdown #identifiers>div {
     position: absolute;
     width: 300px;
     text-align: center;
   }
 
-  .showdown #identifiers>div:nth-child(1){
+  .showdown #identifiers>div:nth-child(1) {
     left: -150px;
   }
 
-  .showdown #identifiers>div:nth-child(2){
+  .showdown #identifiers>div:nth-child(2) {
     right: -150px;
-  }
-
-  .showdown .anouncement{
-    position: absolute;
-    background-color: red;
-    top:30%;
-    width: 200%;
-    left: -100%;
-  }
-
-  .showdown .anouncement>div{
-  }
-
-  .showdown .anouncement>div span{
-    transform-origin: center;
-    position: absolute;
-    display: block;
-    text-align: center;
-    width: 100%;
   }
 
   /** POGS **/
@@ -275,7 +254,7 @@
     left: 50%;
     height: 20px;
     width: 300px;
-    z-index: 0;
+    z-index: -100;
   }
 
   .pog-svg {
@@ -337,22 +316,5 @@
   .attribution a {
     color: hsl(228, 45%, 44%);
   }
-
   </style>
 </head>
-
-<body>
-  <div id="game"></div>
-  <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
-    Coded by <a href="#">AC Weathersby</a>.
-  </div>
-  <script src='cfw/wick'></script>
-  <script>
-  const game_component = wick("/source/game.html");
-  /** Load pogs into game **/
-  const game = game_component.mount(document.getElementById("game"));
-  </script>
-</body>
-
-</html>

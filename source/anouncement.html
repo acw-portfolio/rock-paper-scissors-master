@@ -1,8 +1,8 @@
-<scope class=anouncement import="anouncement duration" component="anouncement" >
+<scope class="anouncement" import="anouncement duration" component="anouncement">
 	<container element="div">
 		<filter scrub=((l))/>
 		((words))
-		<scope class="countdown-word" pin="d">
+		<scope class="countdown-word" pin="d" element="span">
 			((type))
 			<script on=((arrange))>
 				const delay = pos.row * 400;
@@ -22,7 +22,7 @@
 	</container>
 
 	<script on=((loading))>
-		words = [];
+		words = ["rock", "paper"];
 	</script>
 
 	<script on=((anouncement))>

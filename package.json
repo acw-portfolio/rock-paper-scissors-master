@@ -3,8 +3,14 @@
   "version": "1.0.0",
   "description": "Rock Papers Scissors Portfolio Project",
   "main": "index.js",
+  "scripts": {
+    "build": "wick compile ./source/game.html --head ./source/template/head.html --body ./source/template/body.html --place-root-in-body game"
+  },
   "repository": "ssh://git@github.com/acw-portfolio/rock-paper-scissors-master",
   "author": "Anthony Weathersby <anthonycweathersby@gmail.com>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@candlefw/wick": "^0.8.5"
+  }
 }
