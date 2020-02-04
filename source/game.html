@@ -2,30 +2,44 @@
 <import url="./scoreboard.html">
 <import url="./showdown.html">
 <import url="./selection.html">
+<import url="./guide.html">
 
 <scope component="game" id="game">
 
-	<scoreboard></scoreboard>
+	<scoreboard import="game_type:types"/>
 	
 	<div class="centerview">
-		<selection  import="pogs" export="pogchoice"></selection>
-		<showdown  import="show_down_start score game_type:types" export="restart score"></showdown>
+		<selection  import="pogs game_size:size" export="pogchoice"/>
+		<showdown  import="game_size:size show_down_start score game_type:types " export="restart score"/>
 	</div>
 
+	<guide/>
+
 	<script on=((loading))>
+
 		//Need to load in pogs to make sure this scope's [loaded] action is called. 
 		pogs = [];
-		game_type = [
-			{type_id:0,type:"rock", win_map:[0,-1,1]},
-			{type_id:1,type:"paper", win_map:[1,0,-1]},
-			{type_id:2,type:"scissors", win_map:[-1,1,0]}
-			];
+		
+		game_map_a = [
+			{type_id:0,kludge:"rock", type:"rock", win_map: 	 [ 0, -1,  1,  1, -1] },
+			{type_id:1,kludge:"paper", type:"paper", win_map: 	 [ 1,  0, -1, -1,  1] },
+			{type_id:2,kludge:"scissors", type:"scissors", win_map: [-1,  1,  0,  1, -1] }
+		];
+
+		game_map_b = [
+			{kludge: "rock", type_id:0,type:"scissors", win_map: [0,  1,  -1,  1, -1] },
+			{kludge: "paper", type_id:1,type:"paper", win_map: 	 [ 1,  0, -1, -1,  1] },
+			{kludge: "scissors", type_id:2,type:"rock", win_map: 	 [ 1, -1,  0,  1, -1] },
+			{kludge: "lizard", type_id:3,type:"lizard", win_map:   [-1,  1, -1,  0,  1] },
+			{kludge: "spock", type_id:4,type:"spock", win_map: 	 [ 1, -1,  1, -1,  0] }
+		];
+
+		game_size = 3;
 	</script>
 
 	<script on=((loaded))>
-		sizes = 3;
 		score = 0;
-		pogs = game_type;
+		restart = true;
 	</script>
 
 	<script on=((pogchoice))>
@@ -33,7 +47,15 @@
 		show_down_start = {player_selection:pogchoice};
 	</script>
 
+	<script on=((game_size))>
+		if(pogs.length > 0){
+			restart = 0;
+		}
+	</script>
+
 	<script on=((restart))>
-		pogs = game_type;
+		pogs = [];
+		pogs = (game_size == 3) ? game_map_a : game_map_b;
+		game_type = (game_size == 3) ? game_map_a : game_map_b;
 	</script>
 </scope>

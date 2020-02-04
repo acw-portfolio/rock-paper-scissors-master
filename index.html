@@ -1,534 +1,446 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
   <title>Frontend Mentor | Rock, Paper, Scissors</title>
   <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed:600,700&display=swap" rel="stylesheet">
-  <script src="/js/wick.lite.js"></script> <!-- this needs to be removed for production -->
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
-  <style>
-  body {
-    font-family: "Barlow Semi Condensed", Arial, sans-serif;
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    top: 0;
-    left: 0;
-    background-color: #15183b;
-    color: white;
-    font-size: 10px;
-    line-height: 4em;
-    font-weight: 600;
-  }
-
-  /*
-      1.0 Game
-
-      2.0 Score Board
-
-      3.0 Play Area
-
-      light-blue: 575465;
-        Score board integer
-      lightest-blue: 5A6980;
-        Score Board Border
-      deep-blue: 1e34a1;
-        Score text;
-    */
-
-
-  /*1.0 Game */
-
-
-  #game {
-    overflow: hidden;
-    background: radial-gradient(circle, #1f3656 0%, #15183b 100%) no-repeat;
-    background-size: 100% 200%;
-    background-position: 100% 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 25% [content] 50% 25%;
-    grid-template-rows: 5% [scoreboard] 150px 8% [playarea] 300px auto;
-    justify-content: center;
-  }
-
-  /*2.0 SCORE BOARD */
-
-  .scoreboard {
-    grid-column-start: content;
-    grid-row-start: scoreboard;
-    position: relative;
-    border: 3px solid #5A6980;
-    border-radius: 15px;
-    min-height: 100px;
-    padding: 8px;
-    font-size: 1em;
-  }
-
-  .scoreboard>div {
-    top: 0;
-    bottom: 0;
-    margin: 18px;
-  }
-
-  .scoreboard #score {
-    background-color: white;
-    position: absolute;
-    right: 0px;
-    width: 150px;
-    text-align: center;
-    border-radius: 10px;
-  }
-
-  .scoreboard #score #score-text {
-    position: relative;
-    top: 4%;
-    font-size: 1.5em;
-    letter-spacing: 0.2em;
-    color: #244bff;
-  }
-
-  .scoreboard #score #score-integer {
-    font-size: 6em;
-    line-height: 0.8em;
-    font-weight: 700;
-    color: #575465;
-  }
-
-  .scoreboard #game-type {
-    margin: 12px 20px;
-    line-height: 0.8em;
-    font-size: 4.0em;
-    font-weight: 700;
-    width: 80px;
-  }
-
-  /*3.0 PLAY AREA */
-
-  .centerview {
-    position: relative;
-    left: 50%;
-    grid-column-start: content;
-    grid-row-start: playarea;
-  }
-
-  .pog-area-adjust {
-    top: 30%;
-    width: 200px;
-    height: 200px;
-    position: absolute;
-    left: -100px;
-  }
-
-  /** showdown **/
-
-  .countdown-word {
-    font-family: Helvetica, arial, sans-serif;
-    position: absolute;
-    font-size: 20em;
-    color: white;
-    z-index: 1000;
-  }
-
-  .showdown #restart-button {
-    position: absolute;
-    width: 220px;
-    left: -110px;
-    top: 80%;
-    height: 50px;
-    background-color: white;
-    border-radius: 8px;
-    text-align: center;
-    font-size: 2em;
-    color: black;
-  }
-
-  .showdown #result-text {
-    width: 300px;
-    left: -150px;
-    position: absolute;
-    top: 55%;
-    height: 50px;
-    text-align: center;
-    font-size: 6em;
-    font-weight: 700;
-  }
-
-  .showdown #identifiers {
-    position: absolute;
-    width: 600px;
-    left: -300px;
-    top: 5%;
-    height: 50px;
-    text-align: center;
-    font-weight: 700;
-    font-size: 2.5em;
-  }
-
-  .showdown #identifiers>div {
-    position: absolute;
-    width: 300px;
-    text-align: center;
-  }
-
-  .showdown #identifiers>div:nth-child(1) {
-    left: -150px;
-  }
-
-  .showdown #identifiers>div:nth-child(2) {
-    right: -150px;
-  }
-
-  /** POGS **/
-
-  .pog-landing {
-    position: absolute;
-    border-radius: 100px;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    position: absolute;
-    background: #15213b;
-  }
-
-  .pog {
-    position: absolute;
-    border-radius: 100px;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    position: absolute;
-  }
-
-  .pog-base-color {
-    top: 0;
-    position: absolute;
-    width: 100%;
-    height: 105%;
-    border-radius: 100%;
-  }
-
-  .pog-highlight-color {
-    top: 0;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 100%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 70%) -10px -10px no-repeat;
-  }
-
-
-  .pog-center-shadow {
-    top: 12%;
-    left: 12%;
-    position: absolute;
-    width: 76%;
-    height: 76%;
-    background-color: #b9bed4;
-    border-radius: 100%;
-  }
-
-  .pog-center-fill {
-    bottom: 0;
-    position: absolute;
-    width: 90%;
-    height: 85%;
-    padding: 5%;
-    background-color: white;
-    border-radius: 100%;
-  }
-
-  .pog-connection-line {
-    transform-origin: 0 0;
-    position: absolute;
-    background-color: rgb(0, 0, 60);
-    top: 50%;
-    left: 50%;
-    height: 20px;
-    width: 300px;
-    z-index: -100;
-  }
-
-  .pog-svg {
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    width: 50%;
-    height: 50%;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-  }
-
-  .pog.scissors .pog-base-color {
-    background-color: #c76c1b;
-  }
-
-  .pog.scissors .pog-highlight-color {
-    background-color: #eb9e10;
-  }
-
-  .pog.scissors .pog-svg {
-    background-image: url(/images/icon-scissors.svg);
-  }
-
-  .pog.paper .pog-base-color {
-    background-color: #2844c2;
-  }
-
-  .pog.paper .pog-highlight-color {
-    background-color: #4564f3;
-  }
-
-  .pog.paper .pog-svg {
-    background-image: url(/images/icon-paper.svg);
-  }
-
-  .pog.rock .pog-base-color {
-    background-color: #9f1634;
-  }
-
-  .pog.rock .pog-highlight-color {
-    background-color: #dc3755;
-  }
-
-  .pog.rock .pog-svg {
-    background-image: url(/images/icon-rock.svg);
-  }
-
-  /** Attribution **/
-
-  .attribution {
-    font-size: 12px;
-    text-align: center;
-    position: absolute;
-    width: 100%;
-    bottom: 50px
-  }
-
-  .attribution a {
-    color: hsl(228, 45%, 44%);
-  }
-  </style>
+  <!--<script src="/js/wick.lite.js"></script> --><!-- this needs to be removed for production -->
+  <script src="/js/wick.lite.js"></script>
+  <link rel="stylesheet" type="text/css" href="/source/main.css">
 </head>
-
 <body>
-  <div id="game">
-    <div class="scoreboard">
-      <div id="game-type"> ROCK PAPER SCISSORS
-      </div>
-      <div id="score">
-        <div id="score-text">SCORE
-        </div>
-        <span id="score-integer">
+<div id="game">	
+    <div class="scoreboard">		
+        <div id="game-type">		
+            <span></span>	
+        </div>	
+        <div id="score">		
+            <div id="score-text">SCORE
+            </div>		
+            <span id="score-integer">
                 <span></span>
-        </span>
-      </div>
-    </div>
-    <div class="centerview">
-      <div class="showdown">
-        <div element="div" class="pog-area-adjust">
+            </span>	
         </div>
-      </div>
-      <div class="showdown">
-        <div class="pog-area-adjust">
-          <div class="pog-landing">
-          </div>
-          <div>
-            <div class="pog-base-color">
-            </div>
-            <div class="pog-highlight-color">
-            </div>
-            <div class="pog-center-shadow">
-              <div class="pog-center-fill">
-                <div class="pog-svg">
-                </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div class="pog-base-color">
-            </div>
-            <div class="pog-highlight-color">
-            </div>
-            <div class="pog-center-shadow">
-              <div class="pog-center-fill">
-                <div class="pog-svg">
-                </div>
-              </div>
-            </div>
-          </div>
+    </div>		
+    <div class="centerview">		
+        <div class="selection">			
+            <div element="div" class="pog-area-adjust">
+            </div>			
+            <div element="div" class="pog-area-adjust">
+            </div>		
+        </div>		
+        <div class="showdown">	
+            <div class="pog-area-adjust">		
+                <div class="pog-anchor-right">			
+                    <div>				
+                        <div element="div">
+                        </div>
+                    </div>			
+                    <div class="pog-anchor-center">				
+                        <div class="pog-landing">
+                        </div>				
+                        <div>	
+                            <div class="pog-base-color">
+                            </div>	
+                            <div class="pog-highlight-color">
+                            </div>	
+                            <div class="pog-center-shadow">		
+                                <div class="pog-center-fill">
+                                    <div class="pog-svg">
+                                    </div>
+                                </div>	
+                            </div>		
+                        </div>			
+                    </div>		
+                </div>		
+                <div class="pog-anchor-left">			
+                    <div>				
+                        <div element="div">
+                        </div>
+                    </div>			
+                    <div class="pog-anchor-center">				
+                        <div>	
+                            <div class="pog-base-color">
+                            </div>	
+                            <div class="pog-highlight-color">
+                            </div>	
+                            <div class="pog-center-shadow">		
+                                <div class="pog-center-fill">
+                                    <div class="pog-svg">
+                                    </div>
+                                </div>	
+                            </div>		
+                        </div>			
+                    </div>		
+                </div>	
+            </div>	
+            <div class="anouncement">	
+                <div element="div">
+                </div>		
+            </div>	
+            <div class="result-area">		
+                <div id="result-text">
+                    <span></span>
+                </div>		
+                <a id="restart-button">PLAY AGAIN
+                </a>	
+            </div>	
+            <div id="identifiers">		
+                <div>YOU PICKED
+                </div>		
+                <div>THE HOUSE PICKED
+                </div>	
+            </div>			
+        </div>	
+    </div>	
+    <div class="guide">	
+        <button id="guide-button">RULES
+        </button>	
+        <button id="game-type-button">
+            <span></span>
+        </button>				
+        <div id="guide-modal">		
+            <div id="guide-frame">			
+                <h2 id="guide-label">RULES
+                </h2>			
+                <div id="guide-close-button">				
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" url="/images/icon-close.svg">
+                        <path fill="#3B4262" fill-rule="evenodd" d="M16.97 0l2.122 2.121-7.425 7.425 7.425 7.425-2.121 2.12-7.425-7.424-7.425 7.425L0 16.97l7.425-7.425L0 2.121 2.121 0l7.425 7.425L16.971 0z" opacity=".25">
+                        </path>
+                    </svg>			
+                </div>			
+                <div>				
+                    <svg xmlns="http://www.w3.org/2000/svg" width="336" height="330" url="/images/image-rules-bonus.svg">
+                        <defs>
+                            <linearGradient id="a" x1="50%" x2="50%" y1="0%" y2="100%">
+                                <stop offset="0%" stop-color="#FFF" stop-opacity=".097">
+                                </stop>
+                                <stop offset="100%" stop-color="#FFF" stop-opacity="0">
+                                </stop>
+                            </linearGradient>
+                        </defs>
+                        <g fill="none" fill-rule="evenodd">
+                            <g transform="translate(233 92)">
+                                <ellipse cx="51.5" cy="50.172" fill="#B1B4C5" rx="51.5" ry="50.172">
+                                </ellipse>
+                                <ellipse cx="51.5" cy="50.172" fill="url(#a)" rx="51.5" ry="50.172">
+                                </ellipse>
+                                <g transform="translate(11.965 11.897)">
+                                    <ellipse cx="39.535" cy="39.31" fill="#E1E4ED" rx="39.535" ry="39.31">
+                                    </ellipse>
+                                    <path fill="#8A90AC" fill-rule="nonzero" d="M54.896 29.133a2.078 2.078 0 00-.874-.14c-.405.028-.732.192-.925.46-1.14 1.595-2.074 4.607-2.827 7.028-.345 1.119-.81 2.616-1.145 3.327-.35-1.991.045-9.287.199-12.096l.002-.046c.107-1.952.121-2.294.098-2.444-.17-1.07-.599-1.774-1.278-2.088-.686-.32-1.577-.178-2.537.399-.481.29-.614 1.288-1.028 5.81l-.001.02c-.228 2.485-.751 8.206-1.395 9.159-.727-1.333-1.728-8.907-2.16-12.185-.301-2.296-.477-3.614-.596-4.012-.249-.834-1.3-1.544-2.34-1.583-.867-.043-1.578.397-1.917 1.162-.635.705-.41 3.045.29 8.586.335 2.637 1.024 8.084.59 8.695-.865-.094-2.35-3.506-4.414-10.144-.58-1.86-.759-2.418-.937-2.663-.35-.853-1.542-1.51-2.61-1.436-.092.006-.18.018-.268.035-.56.11-1.836.625-1.564 2.998.754 3.29 1.573 5.705 2.367 8.05l.016.046c.476 1.404.925 2.731 1.343 4.204.984 3.476.601 5.633.596 5.658-.032.222-.1.357-.204.405a.396.396 0 01-.139.031c-.311.022-.78-.185-1.02-.319-.551-1.051-3.293-6.062-5.778-6.757l-.09-.026-.09.008c-.911.086-1.581.43-1.991 1.023-.649.937-.38 2.13-.315 2.369l.036.086c.02.036 2.013 3.664 2.322 5.352.266 1.447 1.642 3.015 2.748 4.275l.046.051c.36.413.672.769.917 1.099 3.21 3.343 8.287 6.156 8.328 6.179.633.466.985.917 1.023 1.306a.566.566 0 01-.114.41l-.11.116.702.681 13.392-.94.571-2.613c1.766-7.38 1.397-13.672 1.391-13.714.007-.232.502-2.47.9-4.28l.011-.046c.794-3.603 1.78-8.087 1.97-9.793.082-.73-.386-1.399-1.19-1.703z">
+                                    </path>
+                                </g>
+                            </g>
+                            <g transform="translate(0 92)">
+                                <ellipse cx="51.5" cy="52.5" fill="#B1B4C5" rx="51.5" ry="52.5">
+                                </ellipse>
+                                <ellipse cx="51.5" cy="50.172" fill="url(#a)" rx="51.5" ry="50.172">
+                                </ellipse>
+                                <g transform="translate(11.965 11.897)">
+                                    <ellipse cx="39.535" cy="39.31" fill="#E1E4ED" rx="39.535" ry="39.31">
+                                    </ellipse>
+                                    <path fill="#8A90AC" fill-rule="nonzero" d="M56.968 42.321l-.613-.61c-1.465-1.456-3.86-1.774-5.647-.752l-3.82 2.17.797-17.382a2.654 2.654 0 00-2.659-2.644c-.317 0-.621.056-.904.158l.095-.933c0-1.474-1.211-2.673-2.698-2.673-1.375 0-2.528 1.025-2.674 2.34l-2.45 14.721c-.032.2-.381.18-.418.054l-2.895-11.802a2.598 2.598 0 00-2.487-1.865c-.794 0-1.533.356-2.027.975a2.546 2.546 0 00-.49 2.186l.563 2.376a2.376 2.376 0 00-.949.12 2.445 2.445 0 00-1.652 2.708l1.703 9.739c0 3.842.678 6.685 1.246 8.392.324.974.488 1.999.488 3.045 0 .911-.127 1.818-.38 2.693l-1.32 4.599a.863.863 0 00.833 1.098h15.607a.866.866 0 00.823-1.135c-.009-.022-.734-2.248-.048-5.276.87-.703 3.917-3.166 5.011-4.16 1.809-1.642 6.764-6.716 6.974-6.932a.858.858 0 00-.009-1.21z">
+                                    </path>
+                                </g>
+                            </g>
+                            <g transform="translate(117)">
+                                <ellipse cx="51.5" cy="52.5" fill="#B1B4C5" rx="51.5" ry="52.5">
+                                </ellipse>
+                                <ellipse cx="51.5" cy="50.172" fill="url(#a)" rx="51.5" ry="50.172">
+                                </ellipse>
+                                <g transform="translate(11.965 11.897)">
+                                    <ellipse cx="39.535" cy="39.31" fill="#E1E4ED" rx="39.535" ry="39.31">
+                                    </ellipse>
+                                    <path fill="#8A90AC" fill-rule="nonzero" d="M29.214 38.974l4.271-5.97c-1.775-.295-5.035-.36-7.705 2.295-4.208 4.184-5.913 13.225-6.268 15.413l10.696 10.636c1.926-.164 10.452-1.296 18.667-9.464.087-.177 2.088-1.647.452-3.274-.78-.776-2.073-.762-2.871.032a1.01 1.01 0 01-1.436.014.996.996 0 01.014-1.428l2.903-2.886c1.476-1.467.085-3.941-1.974-3.347l-2.377 2.023a1.022 1.022 0 01-1.435-.099c-.369-.424-.29-1.067.13-1.429 8.301-7.242 7.09-6.37 12.43-11.347 1.996-1.652-.515-4.575-2.481-2.901L39.31 38.794a1.01 1.01 0 01-1.322-.014c-.427-.367-.437-.895-.158-1.312l9.012-13.931c1.318-1.774-1.275-3.744-2.663-1.956l-13.325 18.53a1.009 1.009 0 01-1.41.246.976.976 0 01-.23-1.383z">
+                                    </path>
+                                </g>
+                            </g>
+                            <g transform="translate(187 225)">
+                                <ellipse cx="51.5" cy="52.5" fill="#B1B4C5" rx="51.5" ry="52.5">
+                                </ellipse>
+                                <ellipse cx="51.5" cy="50.172" fill="url(#a)" rx="51.5" ry="50.172">
+                                </ellipse>
+                                <g transform="translate(11.965 11.897)">
+                                    <ellipse cx="39.535" cy="39.31" fill="#E1E4ED" rx="39.535" ry="39.31">
+                                    </ellipse>
+                                    <path fill="#8A90AC" fill-rule="nonzero" d="M54.85 33.665c-.455-5.744-6.914-5.157-6.914-5.157-2.726-4.8-6.984-1.323-6.984-1.323-3.272-4.704-7.374-.345-7.374-.345-7.072-.762-6.798 5.013-6.798 5.013-.167 1.836.996 7.515.996 7.515-1.049-3.273-3.325-.556-3.325-.556-2.797 4.312-.691 6.673-.691 6.673 3.785 4.431 11.854 9.75 11.854 9.75 2.92 1.671 1.685 3.161 1.685 3.161l17.67-2.916.407-3.346c2.686-8.114-.525-18.47-.525-18.47z">
+                                    </path>
+                                </g>
+                            </g>
+                            <g transform="translate(46 225)">
+                                <ellipse cx="51.5" cy="52.5" fill="#B1B4C5" rx="51.5" ry="52.5">
+                                </ellipse>
+                                <ellipse cx="51.5" cy="50.172" fill="url(#a)" rx="51.5" ry="50.172">
+                                </ellipse>
+                                <g transform="translate(11.965 11.897)">
+                                    <ellipse cx="39.535" cy="39.31" fill="#E1E4ED" rx="39.535" ry="39.31">
+                                    </ellipse>
+                                    <path fill="#8A90AC" fill-rule="nonzero" d="M52.31 21.516c2.294-1.419 4.492-1.726 6.19-.865 3.806 1.93 3.255 9.113 1.698 12.226-.88 1.757-2.438 3.04-4.637 3.821-.852 2.695-2.048 5.011-3.575 6.927a5.615 5.615 0 003.607 1.304h.064l2.146-2.116a1.397 1.397 0 011.956 0 1.35 1.35 0 010 1.929l-.19.187H60c.764 0 1.383.61 1.383 1.364 0 .753-.62 1.363-1.383 1.363h-.432l.19.188a1.35 1.35 0 010 1.928c-.27.267-.624.4-.978.4s-.708-.133-.978-.4l-2.146-2.116h-.064a8.404 8.404 0 01-5.487-2.027 15.99 15.99 0 01-.913.77c-2.65 2.07-5.892 3.275-9.68 3.604.478 1.435.571 2.99.244 4.507l-.013.063 1.651 2.598a1.416 1.416 0 01-.418 1.944 1.387 1.387 0 01-1.924-.423l-.146-.23-.093.43a1.396 1.396 0 01-1.656 1.075 1.407 1.407 0 01-1.065-1.674l.093-.43-.228.148c-.647.42-1.508.231-1.924-.423a1.416 1.416 0 01.419-1.944l2.57-1.67.014-.063a5.721 5.721 0 00-.507-3.827 31.796 31.796 0 01-3.407-.283c-3.328-.45-5.215 1.016-5.714 1.476-3.92 3.613-4.679 9.998-4.686 10.062a1.403 1.403 0 01-1.391 1.247 1.4 1.4 0 01-1.158-.615c-.063-.093-1.538-2.295-2.185-5.403-.879-4.22.169-8.093 3.03-11.197a14.707 14.707 0 016.21-3.985l-.292.076a5.682 5.682 0 00-2.397-.53h-.064l-2.154 2.116c-.271.267-.627.4-.982.4s-.71-.133-.982-.4a1.347 1.347 0 010-1.928l.191-.188h-.433c-.767 0-1.389-.61-1.389-1.363 0-.754.622-1.364 1.389-1.364h.433l-.19-.188a1.347 1.347 0 010-1.928 1.406 1.406 0 011.963 0l2.154 2.116h.064c2.345 0 4.568.96 6.152 2.643l-.154-.158a16.297 16.297 0 013.802.067c3.513.475 6.386-.013 8.604-1.456a8.658 8.658 0 01-1.924-5.463v-.065l-2.124-2.19a1.442 1.442 0 010-1.995 1.34 1.34 0 011.936 0l.187.194v-.44c0-.78.613-1.411 1.37-1.411.755 0 1.368.631 1.368 1.41v.441l.188-.194a1.34 1.34 0 011.935 0c.815.84.227 1.762 0 1.996l-2.123 2.189v.065c0 1.332.45 2.606 1.259 3.618 1.002-1.198 1.79-2.703 2.36-4.514-.417-1.153-1.065-3.882.589-6.978.866-1.622 2.531-3.326 4.345-4.448z">
+                                    </path>
+                                </g>
+                            </g>
+                            <g fill="#B1B4C5" transform="rotate(-40 152.162 -62.778)">
+                                <rect width="32.692" height="2.667" y="6.667" rx="1.333">
+                                </rect>
+                                <path d="M27.437 1.343l5.617 5.819c.47.487.466 1.26-.009 1.744a1.187 1.187 0 01-1.7-.009l-5.617-5.819a1.249 1.249 0 01.009-1.744 1.187 1.187 0 011.7.009z">
+                                </path>
+                                <path d="M25.728 12.922l5.617-5.82a1.187 1.187 0 011.7-.008c.475.483.48 1.257.009 1.744l-5.617 5.82a1.187 1.187 0 01-1.7.008 1.249 1.249 0 01-.009-1.744z">
+                                </path>
+                            </g>
+                            <g fill="#B1B4C5" transform="scale(1 -1) rotate(-40 11.858 -344.091)">
+                                <rect width="32.692" height="2.667" y="6.667" rx="1.333">
+                                </rect>
+                                <path d="M27.437 1.343l5.617 5.819c.47.487.466 1.26-.009 1.744a1.187 1.187 0 01-1.7-.009l-5.617-5.819a1.249 1.249 0 01.009-1.744 1.187 1.187 0 011.7.009z">
+                                </path>
+                                <path d="M25.728 12.922l5.617-5.82a1.187 1.187 0 011.7-.008c.475.483.48 1.257.009 1.744l-5.617 5.82a1.187 1.187 0 01-1.7.008 1.249 1.249 0 01-.009-1.744z">
+                                </path>
+                            </g>
+                            <g fill="#B1B4C5" transform="rotate(127 100.649 180.558)">
+                                <rect width="32.692" height="2.667" y="6.667" rx="1.333">
+                                </rect>
+                                <path d="M27.437 1.343l5.617 5.819c.47.487.466 1.26-.009 1.744a1.187 1.187 0 01-1.7-.009l-5.617-5.819a1.249 1.249 0 01.009-1.744 1.187 1.187 0 011.7.009z">
+                                </path>
+                                <path d="M25.728 12.922l5.617-5.82a1.187 1.187 0 011.7-.008c.475.483.48 1.257.009 1.744l-5.617 5.82a1.187 1.187 0 01-1.7.008 1.249 1.249 0 01-.009-1.744z">
+                                </path>
+                            </g>
+                            <g fill="#B1B4C5" transform="matrix(-1 0 0 1 186 297)">
+                                <rect width="32.692" height="2.667" y="6.667" rx="1.333">
+                                </rect>
+                                <path d="M27.437 1.343l5.617 5.819c.47.487.466 1.26-.009 1.744a1.187 1.187 0 01-1.7-.009l-5.617-5.819a1.249 1.249 0 01.009-1.744 1.187 1.187 0 011.7.009z">
+                                </path>
+                                <path d="M25.728 12.922l5.617-5.82a1.187 1.187 0 011.7-.008c.475.483.48 1.257.009 1.744l-5.617 5.82a1.187 1.187 0 01-1.7.008 1.249 1.249 0 01-.009-1.744z">
+                                </path>
+                            </g>
+                            <g fill="#B1B4C5" transform="scale(-1 1) rotate(-53 195.597 178.185)">
+                                <rect width="32.692" height="2.667" y="6.667" rx="1.333">
+                                </rect>
+                                <path d="M27.437 1.343l5.617 5.819c.47.487.466 1.26-.009 1.744a1.187 1.187 0 01-1.7-.009l-5.617-5.819a1.249 1.249 0 01.009-1.744 1.187 1.187 0 011.7.009z">
+                                </path>
+                                <path d="M25.728 12.922l5.617-5.82a1.187 1.187 0 011.7-.008c.475.483.48 1.257.009 1.744l-5.617 5.82a1.187 1.187 0 01-1.7.008 1.249 1.249 0 01-.009-1.744z">
+                                </path>
+                            </g>
+                            <g fill="#B1B4C5">
+                                <g transform="matrix(-1 0 0 1 212 131)">
+                                    <rect width="85" height="2.667" x=".692" y="6.667" rx="1.333">
+                                    </rect>
+                                    <path d="M80.437 1.343l5.617 5.819c.47.487.466 1.26-.009 1.744a1.187 1.187 0 01-1.7-.009l-5.617-5.819a1.249 1.249 0 01.009-1.744 1.187 1.187 0 011.7.009z">
+                                    </path>
+                                    <path d="M78.728 12.922l5.617-5.82a1.187 1.187 0 011.7-.008c.475.483.48 1.257.009 1.744l-5.617 5.82a1.187 1.187 0 01-1.7.008 1.249 1.249 0 01-.009-1.744z">
+                                    </path>
+                                </g>
+                                <text font-family="BarlowSemiCondensed-Bold, Barlow Semi Condensed" font-size="6" font-style="condensed" font-weight="bold" transform="translate(124 131)">
+                                    <tspan x="36" y="14">BEATS
+                                    </tspan>
+                                </text>
+                                <g transform="rotate(40 -169.505 247.617)">
+                                    <rect width="85" height="2.667" x=".692" y="6.667" rx="1.333">
+                                    </rect>
+                                    <path d="M80.437 1.343l5.617 5.819c.47.487.466 1.26-.009 1.744a1.187 1.187 0 01-1.7-.009l-5.617-5.819a1.249 1.249 0 01.009-1.744 1.187 1.187 0 011.7.009z">
+                                    </path>
+                                    <path d="M78.728 12.922l5.617-5.82a1.187 1.187 0 011.7-.008c.475.483.48 1.257.009 1.744l-5.617 5.82a1.187 1.187 0 01-1.7.008 1.249 1.249 0 01-.009-1.744z">
+                                    </path>
+                                </g>
+                                <text font-family="BarlowSemiCondensed-Bold, Barlow Semi Condensed" font-size="6" font-style="condensed" font-weight="bold" transform="rotate(40 -161.263 250.617)">
+                                    <tspan x="36" y="6">BEATS
+                                    </tspan>
+                                </text>
+                                <g transform="rotate(-40 381.505 -93.07)">
+                                    <rect width="85" height="2.667" x=".692" y="6.667" rx="1.333">
+                                    </rect>
+                                    <path d="M80.437 1.343l5.617 5.819c.47.487.466 1.26-.009 1.744a1.187 1.187 0 01-1.7-.009l-5.617-5.819a1.249 1.249 0 01.009-1.744 1.187 1.187 0 011.7.009z">
+                                    </path>
+                                    <path d="M78.728 12.922l5.617-5.82a1.187 1.187 0 011.7-.008c.475.483.48 1.257.009 1.744l-5.617 5.82a1.187 1.187 0 01-1.7.008 1.249 1.249 0 01-.009-1.744z">
+                                    </path>
+                                </g>
+                                <text font-family="BarlowSemiCondensed-Bold, Barlow Semi Condensed" font-size="6" font-style="condensed" font-weight="bold" transform="rotate(-40 373.263 -90.07)">
+                                    <tspan x="36" y="6">BEATS
+                                    </tspan>
+                                </text>
+                                <g>
+                                    <g transform="rotate(-110 176.867 31.934)">
+                                        <rect width="85" height="2.667" x=".692" y="6.667" rx="1.333">
+                                        </rect>
+                                        <path d="M80.437 1.343l5.617 5.819c.47.487.466 1.26-.009 1.744a1.187 1.187 0 01-1.7-.009l-5.617-5.819a1.249 1.249 0 01.009-1.744 1.187 1.187 0 011.7.009z">
+                                        </path>
+                                        <path d="M78.728 12.922l5.617-5.82a1.187 1.187 0 011.7-.008c.475.483.48 1.257.009 1.744l-5.617 5.82a1.187 1.187 0 01-1.7.008 1.249 1.249 0 01-.009-1.744z">
+                                        </path>
+                                    </g>
+                                    <text font-family="BarlowSemiCondensed-Bold, Barlow Semi Condensed" font-size="6" font-style="condensed" font-weight="bold" transform="rotate(-110 174.766 34.934)">
+                                        <tspan x="36" y="6">BEATS
+                                        </tspan>
+                                    </text>
+                                </g>
+                                <g>
+                                    <g transform="rotate(110 35.133 118.76)">
+                                        <rect width="85" height="2.667" x=".692" y="6.667" rx="1.333">
+                                        </rect>
+                                        <path d="M80.437 1.343l5.617 5.819c.47.487.466 1.26-.009 1.744a1.187 1.187 0 01-1.7-.009l-5.617-5.819a1.249 1.249 0 01.009-1.744 1.187 1.187 0 011.7.009z">
+                                        </path>
+                                        <path d="M78.728 12.922l5.617-5.82a1.187 1.187 0 011.7-.008c.475.483.48 1.257.009 1.744l-5.617 5.82a1.187 1.187 0 01-1.7.008 1.249 1.249 0 01-.009-1.744z">
+                                        </path>
+                                    </g>
+                                    <text font-family="BarlowSemiCondensed-Bold, Barlow Semi Condensed" font-size="6" font-style="condensed" font-weight="bold" transform="rotate(110 37.234 121.76)">
+                                        <tspan x="36" y="6">BEATS
+                                        </tspan>
+                                    </text>
+                                </g>
+                            </g>
+                            <text fill="#B1B4C5" font-family="BarlowSemiCondensed-Bold, Barlow Semi Condensed" font-size="11" font-style="condensed" font-weight="bold">
+                                <tspan x="252" y="64">BEATS
+                                </tspan>
+                            </text>
+                            <text fill="#B1B4C5" font-family="BarlowSemiCondensed-Bold, Barlow Semi Condensed" font-size="11" font-style="condensed" font-weight="bold">
+                                <tspan x="55" y="64">BEATS
+                                </tspan>
+                            </text>
+                            <text fill="#B1B4C5" font-family="BarlowSemiCondensed-Bold, Barlow Semi Condensed" font-size="11" font-style="condensed" font-weight="bold">
+                                <tspan x="305" y="225">BEATS
+                                </tspan>
+                            </text>
+                            <text fill="#B1B4C5" font-family="BarlowSemiCondensed-Bold, Barlow Semi Condensed" font-size="11" font-style="condensed" font-weight="bold">
+                                <tspan x="1" y="225">BEATS
+                                </tspan>
+                            </text>
+                            <text fill="#B1B4C5" font-family="BarlowSemiCondensed-Bold, Barlow Semi Condensed" font-size="11" font-style="condensed" font-weight="bold">
+                                <tspan x="154" y="328">BEATS
+                                </tspan>
+                            </text>
+                        </g>
+                    </svg>			
+                </div>			
+                <div>				
+                    <svg xmlns="http://www.w3.org/2000/svg" width="304" height="270" url="/images/image-rules.svg">
+                        <defs>
+                            <linearGradient id="a" x1="50%" x2="50%" y1="0%" y2="100%">
+                                <stop offset="0%" stop-color="#FFF" stop-opacity=".097">
+                                </stop>
+                                <stop offset="100%" stop-color="#FFF" stop-opacity="0">
+                                </stop>
+                            </linearGradient>
+                            <linearGradient id="b" x1="50%" x2="50%" y1="0%" y2="100%">
+                                <stop offset="0%" stop-color="#FFF" stop-opacity=".097">
+                                </stop>
+                                <stop offset="100%" stop-color="#FFF" stop-opacity="0">
+                                </stop>
+                            </linearGradient>
+                        </defs>
+                        <g fill="none" fill-rule="evenodd">
+                            <ellipse cx="53.189" cy="54.815" fill="#B1B4C5" rx="53.189" ry="54.815">
+                            </ellipse>
+                            <ellipse cx="53.189" cy="52.385" fill="url(#a)" rx="53.189" ry="52.385">
+                            </ellipse>
+                            <g transform="translate(12.357 12.421)">
+                                <ellipse cx="40.832" cy="41.044" fill="#E1E4ED" rx="40.832" ry="41.044">
+                                </ellipse>
+                                <path fill="#8A90AC" fill-rule="nonzero" d="M56.697 30.417a2.125 2.125 0 00-.904-.146c-.417.03-.755.201-.955.481-1.177 1.666-2.141 4.81-2.919 7.337-.357 1.169-.836 2.733-1.183 3.475-.362-2.08.047-9.697.206-12.63l.002-.047c.11-2.038.125-2.396.1-2.553-.174-1.118-.618-1.852-1.319-2.18-.708-.333-1.629-.186-2.62.417-.497.303-.635 1.345-1.061 6.067l-.002.02c-.235 2.595-.776 8.568-1.441 9.563-.75-1.392-1.784-9.3-2.23-12.722-.312-2.397-.494-3.774-.616-4.19-.257-.87-1.343-1.611-2.418-1.653-.895-.044-1.629.415-1.98 1.214-.655.736-.423 3.179.302 8.964.344 2.754 1.056 8.441.608 9.08-.893-.099-2.427-3.661-4.559-10.592-.598-1.942-.783-2.525-.967-2.78-.362-.891-1.593-1.578-2.696-1.5a2.314 2.314 0 00-.277.036c-.578.116-1.896.653-1.615 3.13.779 3.435 1.624 5.957 2.445 8.405l.016.05c.491 1.465.955 2.85 1.387 4.388 1.016 3.63.621 5.882.616 5.907-.034.232-.105.374-.211.423a.405.405 0 01-.143.033c-.322.023-.805-.193-1.055-.333-.568-1.098-3.4-6.33-5.967-7.055L25.15 41l-.093.008c-.942.09-1.634.45-2.057 1.068-.67.978-.393 2.224-.325 2.474l.038.09c.02.037 2.079 3.825 2.397 5.587.275 1.511 1.696 3.148 2.838 4.464l.047.054c.373.43.695.802.948 1.146 3.316 3.492 8.558 6.428 8.601 6.452.654.487 1.018.958 1.056 1.363a.595.595 0 01-.117.43l-.114.12.725.711 13.832-.98.59-2.73c1.823-7.705 1.442-14.275 1.436-14.319.007-.242.518-2.58.93-4.468l.011-.048c.82-3.763 1.838-8.444 2.034-10.225.085-.761-.398-1.46-1.23-1.779z">
+                                </path>
+                            </g>
+                            <g transform="translate(196)">
+                                <ellipse cx="53.686" cy="54.815" fill="#B1B4C5" rx="53.686" ry="54.815">
+                                </ellipse>
+                                <ellipse cx="53.686" cy="52.385" fill="url(#b)" rx="53.686" ry="52.385">
+                                </ellipse>
+                                <g transform="translate(12.473 12.421)">
+                                    <ellipse cx="41.214" cy="41.044" fill="#E1E4ED" rx="41.214" ry="41.044">
+                                    </ellipse>
+                                    <path fill="#8A90AC" fill-rule="nonzero" d="M30.455 40.692l4.451-6.234c-1.85-.307-5.248-.375-8.031 2.397-4.388 4.37-6.165 13.809-6.535 16.093l11.15 11.105c2.008-.17 10.896-1.353 19.46-9.881.09-.184 2.177-1.72.471-3.418-.814-.81-2.162-.796-2.993.033a1.051 1.051 0 01-1.497.015 1.04 1.04 0 01.015-1.49l3.026-3.014c1.538-1.532.089-4.116-2.058-3.495l-2.477 2.112a1.065 1.065 0 01-1.497-.103c-.384-.443-.302-1.114.135-1.492 8.654-7.562 7.39-6.65 12.958-11.848 2.08-1.725-.536-4.776-2.586-3.03L40.978 40.506a1.051 1.051 0 01-1.378-.015c-.445-.383-.455-.934-.164-1.37l9.395-14.545c1.373-1.852-1.33-3.91-2.776-2.042L32.164 41.881a1.05 1.05 0 01-1.47.255 1.02 1.02 0 01-.24-1.444z">
+                                    </path>
+                                </g>
+                            </g>
+                            <g transform="translate(98 160)">
+                                <ellipse cx="53.686" cy="54.815" fill="#B1B4C5" rx="53.686" ry="54.815">
+                                </ellipse>
+                                <ellipse cx="53.686" cy="52.385" fill="url(#b)" rx="53.686" ry="52.385">
+                                </ellipse>
+                                <g transform="translate(12.473 12.421)">
+                                    <ellipse cx="41.214" cy="41.044" fill="#E1E4ED" rx="41.214" ry="41.044">
+                                    </ellipse>
+                                    <path fill="#8A90AC" fill-rule="nonzero" d="M57.179 35.15c-.475-5.997-7.208-5.385-7.208-5.385-2.842-5.01-7.281-1.381-7.281-1.381-3.41-4.911-7.687-.36-7.687-.36-7.373-.796-7.087 5.234-7.087 5.234-.173 1.917 1.04 7.847 1.04 7.847-1.094-3.418-3.467-.581-3.467-.581-2.917 4.502-.721 6.967-.721 6.967 3.947 4.626 12.357 10.18 12.357 10.18 3.046 1.745 1.757 3.3 1.757 3.3l18.42-3.044.424-3.494c2.8-8.472-.547-19.284-.547-19.284z">
+                                    </path>
+                                </g>
+                            </g>
+                            <text fill="#B1B4C5" font-family="BarlowSemiCondensed-Bold, Barlow Semi Condensed" font-size="13" font-style="condensed" font-weight="bold">
+                                <tspan x="134" y="31">BEATS
+                                </tspan>
+                            </text>
+                            <text fill="#B1B4C5" font-family="BarlowSemiCondensed-Bold, Barlow Semi Condensed" font-size="13" font-style="condensed" font-weight="bold">
+                                <tspan x="40" y="147">BEATS
+                                </tspan>
+                            </text>
+                            <text fill="#B1B4C5" font-family="BarlowSemiCondensed-Bold, Barlow Semi Condensed" font-size="13" font-style="condensed" font-weight="bold">
+                                <tspan x="235" y="147">BEATS
+                                </tspan>
+                            </text>
+                            <g fill="#B1B4C5" transform="matrix(-1 0 0 1 177 39)">
+                                <rect width="50" height="4" y="10" rx="2">
+                                </rect>
+                                <path d="M41.963 2.015l8.59 8.728c.716.727.71 1.896-.013 2.616a1.833 1.833 0 01-2.6-.013l-8.59-8.728a1.855 1.855 0 01.013-2.616 1.833 1.833 0 012.6.013z">
+                                </path>
+                                <path d="M39.35 19.382l8.59-8.728a1.833 1.833 0 012.6-.013c.723.72.729 1.889.013 2.616l-8.59 8.728a1.833 1.833 0 01-2.6.013 1.855 1.855 0 01-.013-2.616z">
+                                </path>
+                            </g>
+                            <g fill="#B1B4C5" transform="scale(1 -1) rotate(-55 -82.574 -131.195)">
+                                <rect width="50" height="4" y="10" rx="2">
+                                </rect>
+                                <path d="M41.963 2.015l8.59 8.728c.716.727.71 1.896-.013 2.616a1.833 1.833 0 01-2.6-.013l-8.59-8.728a1.855 1.855 0 01.013-2.616 1.833 1.833 0 012.6.013z">
+                                </path>
+                                <path d="M39.35 19.382l8.59-8.728a1.833 1.833 0 012.6-.013c.723.72.729 1.889.013 2.616l-8.59 8.728a1.833 1.833 0 01-2.6.013 1.855 1.855 0 01-.013-2.616z">
+                                </path>
+                            </g>
+                            <g fill="#B1B4C5" transform="rotate(-55 240.022 -103.651)">
+                                <rect width="50" height="4" y="10" rx="2">
+                                </rect>
+                                <path d="M41.963 2.015l8.59 8.728c.716.727.71 1.896-.013 2.616a1.833 1.833 0 01-2.6-.013l-8.59-8.728a1.855 1.855 0 01.013-2.616 1.833 1.833 0 012.6.013z">
+                                </path>
+                                <path d="M39.35 19.382l8.59-8.728a1.833 1.833 0 012.6-.013c.723.72.729 1.889.013 2.616l-8.59 8.728a1.833 1.833 0 01-2.6.013 1.855 1.855 0 01-.013-2.616z">
+                                </path>
+                            </g>
+                        </g>
+                    </svg>			
+                </div>		
+            </div>	
         </div>
-        <div class="anouncement">
-          <div element="div">
-          </div>
-        </div>
-        <div id="result-text">
-          <span></span>
-        </div>
-        <a id="restart-button">PLAY AGAIN
-            </a>
-        <div id="identifiers">
-          <div>YOU PICKED
-          </div>
-          <div>THE HOUSE PICKED
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
-    Coded by <a href="#">AC Weathersby</a>.
-  </div>
-  <template id="WD1E5FE9">
-    <div>
-      <div class="pog-connection-line">
-      </div>
-      <div class="pog-base-color">
-      </div>
-      <div class="pog-highlight-color">
-      </div>
-      <div class="pog-center-shadow">
+    </div>					
+</div>
+<div class="attribution">
+  Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
+  Coded by <a href="#">AC Weathersby</a>.
+</div>
+<template id="WE4CCE5D"><div class="pog-connection-line">														
+</div></template><template id="W95F2E83"><div>																																								
+    <div class="pog-base-color">
+    </div>	
+    <div class="pog-highlight-color">
+    </div>	
+    <div class="pog-center-shadow">		
         <div class="pog-center-fill">
-          <div class="pog-svg">
-          </div>
-        </div>
-      </div>
-    </div>
-  </template><template id="W29A96EE">
-    <div class="countdown-word">
-      <span></span>
-    </div>
-  </template>
-  <script>
-  wl.lc("W5D23A18", wl.gt("W5D23A18"), class extends wl.sc { constructor(e, wl) { super(e, wl, [0, 1, 1], [0, 1, 1, 0]); const o = this;
-      o.f = [{ o: 0, S: 0, f: o.f1, r: 1, a: 1 }];
-      o.n = ["score"];
-      o.v = [null];
-      o.g = [1]; } f1() { this.el[0].setAttribute("style", this.v[0] < 0 ? "color:red" : "");
-      this.el[1].innerHTML = this.v[0]; } });
-  wl.lc("WD1E5FE9", wl.gt("WD1E5FE9"), class extends wl.sc { constructor(e, wl) { super(e, wl, [0], [0, 0]); const o = this;
-      o.f = [{ o: 0, S: 0, f: o.f1, r: 1, a: 1 }, { o: 6, S: 1, f: o.f2, r: 57, a: 64 }, { o: 7, S: 1, f: o.f3, r: 0, a: 128 }, { o: 10, S: 1, f: o.f4, r: 768, a: 1024 }, { o: 11, S: 1, f: o.f5, r: 512, a: 2048 }];
-      o.n = ["type", "pogchoice", "sizes", "x", "y", "type_id", "click", "loading", "pos", "trs", "arrange", "trs_out"];
-      o.v = [null, null, null, null, null, null, null, null, null, null, null, null];
-      o.g = [1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      o.e0 = e => { o.e({ click: { event: e } }); };
-      o.el[0].addEventListener("click", o.e0); } destroy() { const o = this;
-      o.el[0].removeEventListener("click", o.e0);
-      super.destroy(); } f1() { this.el[0].setAttribute("class", "pog " + this.v[0]); } f2() { this.e({ pogchoice: { type: this.v[0], x: this.v[3], y: this.v[4], type_id: this.v[5] } });
-      this.CHOSEN = true; } f3() { this.el[0].style.opacity = 0; } f4() { const angle = (Math.PI * 2 / 3) * this.v[8].row; const val = angle + Math.PI,
-        d = 160,
-        d1 = d * 0.8,
-        d2 = d * 0.4,
-        px = Math.round(d2 * Math.sin(val - 1.2) * 10000) / 10000,
-        py = Math.round(d2 * -Math.cos(val - 1.2) * 10000) / 10000,
-        p1x = Math.round(d1 * Math.sin(val - 0.8) * 10000) / 10000,
-        p1y = Math.round(d1 * -Math.cos(val - 0.8) * 10000) / 10000,
-        p2x = Math.round(d * Math.sin(val) * 10000) / 10000,
-        p2y = Math.round(d * -Math.cos(val) * 10000) / 10000; const t = angle + (Math.PI / 3) * (this.v[8].row + 1) * 2;
-      this.e({ x: p2x });
-      this.e({ y: p2y }); const delay = 300 + 100 * this.v[8].row;
-      this.v[9]({ obj: this.el[0], opacity: [{ v: 0 }, { delay: delay, v: 1, dur: 200 }], transform: [{ delay, v: "translate(0px, 50px) scale(0.5)", dur: 0 }, { v: `translate(${px}px, ${py}px)scale(0.5)`, dur: 50, easing: this.wl.glow.linear }, { v: `translate(${p1x}px, ${p1y}px)  scale(0.6)`, dur: 75, easing: this.wl.glow.linear }, { v: `translate(${p2x}px, ${p2y}px)  scale(1)`, dur: 500, easing: this.wl.glow.ease_out }] }, { obj: this.el[1], transform: [{ v: `rotate(0)`, dur: 0 }, { v: `rotate(${t}})`, dur: 600, easing: this.wl.glow.linear }] }); } f5() { if (this.CHOSEN) { this.CHOSEN = false;
-        this.v[9]({ obj: this.el[0], opacity: [{ v: 0, dur: 5, delay: 40 }] }); } else this.v[9]({ obj: this.el[0], transform: { v: "translate(0px, 50px) scale(0.2)", dur: 300 }, opacity: [{ v: 0, dur: 300 }] }); } });
-  wl.lc("WD886236", wl.gt("WD886236"), class extends wl.sc { constructor(e, wl) { super(e, wl, [0, 0]); const o = this;
-      o.f = [{ o: 1, S: 0, f: o.f1, r: 2, a: 2 }];
-      o.n = ["pogchoice", "pogs"];
-      o.v = [null, null];
-      o.g = [2, 1];
-      o.c1 = wl.ctr(o, o.el[0], "WD1E5FE9"); } destroy() { const o = this;
-      o.c1.destroy();
-      super.destroy(); } f1() { this.c1.l(this.v[1]); } });
-  wl.lc("W13AFF58", wl.gt("W13AFF58"), class extends wl.sc { constructor(e, wl) { super(e, wl, [0]); const o = this;
-      o.f = [{ o: 2, S: 0, f: o.f1, r: 4, a: 4 }, { o: 0, S: 0, f: o.f2, r: 1, a: 1 }];
-      o.n = ["type", "show_down_start", "player_type"];
-      o.v = [null, null, null];
-      o.g = [1, 1, 1]; } f1() { this.e({ type: this.v[2] }); } f2() { this.el[0].setAttribute("class", "pog " + this.v[0]); } });
-  wl.lc("W802F67F", wl.gt("W802F67F"), class extends wl.sc { constructor(e, wl) { super(e, wl, [0]); const o = this;
-      o.f = [{ o: 2, S: 0, f: o.f1, r: 4, a: 4 }, { o: 0, S: 0, f: o.f2, r: 1, a: 1 }];
-      o.n = ["type", "show_down_start", "computer_type"];
-      o.v = [null, null, null];
-      o.g = [1, 1, 1]; } f1() { this.e({ type: this.v[2] }); } f2() { this.el[0].setAttribute("class", "pog " + this.v[0]); } });
-  wl.lc("W29A96EE", wl.gt("W29A96EE"), class extends wl.sc { constructor(e, wl) { super(e, wl, [0], [0, 0]); const o = this;
-      o.f = [{ o: 0, S: 0, f: o.f1, r: 1, a: 1 }, { o: 3, S: 1, f: o.f2, r: 6, a: 8 }];
-      o.n = ["type", "pos", "trs", "arrange"];
-      o.v = [null, null, null, null];
-      o.g = [0, 0, 0, 0]; } f1() { this.el[1].innerHTML = this.v[0]; } f2() { const delay = this.v[1].row * 400; const r = Math.random() * 2 - 1;
-      this.el[0].style.opacity = 0;
-      this.v[2]({ obj: this.el[0], opacity: [{ v: 0, delay: delay }, { v: 1, dur: 200 }, { v: 0, dur: 1 }], transform: [{ v: `scale(2) rotate(${r})`, dur: 20, easing: this.wl.glow.ease_out, delay }, { v: `scale(1)`, dur: 100, easing: this.wl.glow.linear }, { v: `scale(1)`, dur: 300, easing: this.wl.glow.ease_in }] }); } });
-  wl.lc("W2FFC9D1", wl.gt("W2FFC9D1"), class extends wl.sc { constructor(e, wl) { super(e, wl, [0, 0]); const o = this;
-      o.f = [{ o: 2, S: 0, f: o.f1, r: 4, a: 4 }, { o: 3, S: 1, f: o.f2, r: 0, a: 8 }, { o: 0, S: 1, f: o.f3, r: 1, a: 1 }];
-      o.n = ["anouncement", "duration", "words", "loading"];
-      o.v = [null, null, null, null];
-      o.g = [1, 1, 0, 0];
-      o.c1 = wl.ctr(o, o.el[0], "W29A96EE"); } destroy() { const o = this;
-      o.c1.destroy();
-      super.destroy(); } f1() { this.c1.l(this.v[2]); } f2() { this.e({ words: [] }); } f3() { this.e({ words: this.v[0] }); } });
-  wl.lc("W66F6E99", wl.gt("W66F6E99"), class extends wl.sc { constructor(e, wl) { super(e, wl, [0], [0, 0, 0], [0, 0, 1], [0, 0, 2], [0, 1], [0, 2], [0, 2, 0], [0, 3], [0, 4]); const o = this;
-      o.f = [{ o: 4, S: 0, f: o.f1, r: 16, a: 16 }, { o: 10, S: 0, f: o.f2, r: 1024, a: 1024 }, { o: 11, S: 1, f: o.f3, r: 0, a: 2048 }, { o: 1, S: 1, f: o.f4, r: 4105, a: 2 }, { o: 13, S: 1, f: o.f5, r: 0, a: 8192 }];
-      o.n = ["types", "show_down_start", "restart", "score", "game_type", "type", "player_type", "computer_type", "anouncement", "duration", "result_text", "loaded", "player_selection", "arm_restart"];
-      o.v = [null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-      o.g = [1, 1, 2, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      o.e0 = e => { o.e({ arm_restart: { event: e } }); };
-      o.el[7].addEventListener("click", o.e0);
-      o.addScope(wl.cc("W13AFF58", o.el[2]));
-      o.addScope(wl.cc("W802F67F", o.el[3]));
-      o.addScope(wl.cc("W2FFC9D1", o.el[4])); } destroy() { const o = this;
-      o.el[7].removeEventListener("click", o.e0);
-      super.destroy(); } f1() { this.e({ types: this.v[4] }); } f2() { this.el[6].innerHTML = this.v[10]; } f3() { this.el[0].style.opacity = 0;
-      this.el[2].style.opacity = 0;
-      this.el[3].style.opacity = 0;
-      this.el[7].style.opacity = 0;
-      this.el[5].style.opacity = 0;
-      this.el[8].style.opacity = 0; } async f4() { this.el[0].style.opacity = 1;
-      this.el[2].style.opacity = 0; const index = Math.round(Math.random() * this.v[0].length) % this.v[0].length; const computer_selection = this.v[0][index];
-      this.e({ player_type: this.v[12].type });
-      this.e({ computer_type: computer_selection.type });
-      await this.wl.glow({ obj: this.el[2], opacity: { v: 1, dur: 1 }, transform: [{ v: `translate(${this.v[12].x}, ${this.v[12].y}) scale(1.05)`, dur: 0 }, { v: "translate(0px, 50px) scale(1.5)", dur: 300, easing: this.wl.glow.anticipate }, { v: "translate(-200px, 50px)", delay: 100, dur: 300, easing: this.wl.glow.overshoot }] }, { obj: this.el[1], opacity: { v: 1, dur: 1 }, transform: [{ v: `translate(${this.v[12].x}, ${this.v[12].y}) scale(1.05)`, dur: 0 }, { v: "translate(0px, 50px) scale(1.3)", dur: 300, easing: this.wl.glow.anticipate }, { v: "translate(200px, 50px)", delay: 100, dur: 300, easing: this.wl.glow.overshoot }] }).play().await();
-      this.e({ anouncement: this.v[0] });
-      await this.wl.glow({ obj: this.el[1], opacity: { v: 0, delay: 1000 }, transform: [{ v: "scale(1.0)", delay: 900, dur: 100, easing: this.wl.glow.overshoot }] }, { obj: this.el[2], transform: [{ v: "translate(-280px, 50px) rotate(0.8)", delay: 1000, dur: 200, easing: this.wl.glow.ease_out }, { v: "translate(-145px, 50px) rotate(-0.8) scale(1.4, 1.5)", delay: 100, dur: 50, easing: this.wl.glow.overshoot }] }, { obj: this.el[3], opacity: { v: 1, dur: 1, delay: 1000 }, transform: [{ v: "translate(200px, 50px) scale(1)", delay: 1000, dur: 1 }, { v: "scale(1.8)", dur: 100, easing: this.wl.glow.anticipate }, { v: `scale(1.5)`, dur: 100, easing: this.wl.glow.overshoot }, { v: "translate(300px, 50px) rotate(-0.8)", delay: 20, dur: 100, easing: this.wl.glow.overshoot }, { v: "translate(145px, 50px) rotate(0.8) scale(1.4, 1.5)", delay: 100, dur: 50, easing: this.wl.glow.overshoot }] }).play().await();
-      this.e({ anouncement: [] });
-      this.el[1].style.opacity = 0; switch (computer_selection.win_map[this.v[12].type_id]) {
-        case 0:
-          this.e({ result_text: "A DRAW" }); break;
-        case 1:
-          this.e({ result_text: "YOU LOSE" });
-          this.e({ score: this.v[3] - 1 });
-          this.el[2].style.zIndex = 1;
-          this.el[3].style.zIndex = 100;
-          await this.wl.glow({ obj: this.el[2], transform: { v: "scale(1.5, 1.2) rotate(0) translate(-150px, 80px)", delay: 300, dur: 200, easing: this.wl.glow.overshoot } }, { obj: this.el[3], transform: { v: "scale(1.8)", delay: 300, dur: 20, easing: this.wl.glow.overshoot } }).play().await(); break;
-        case -1:
-          this.e({ result_text: "YOU WIN" });
-          this.e({ score: this.v[3] + 1 });
-          this.el[2].style.zIndex = 100;
-          this.el[3].style.zIndex = 1;
-          await this.wl.glow({ obj: this.el[2], transform: { v: "scale(1.8)", delay: 300, dur: 20, easing: this.wl.glow.overshoot } }, { obj: this.el[3], transform: { v: "scale(1.5, 1.2) rotate(0) translate(150px, 80px)", delay: 300, dur: 200, easing: this.wl.glow.overshoot } }).play().await(); break; } await this.wl.glow({ obj: this.el[2], transform: { v: "translate(-300px, 50px) rotate(0) scale(1.5)", delay: 500, dur: 200, easing: this.wl.glow.ease_out } }, { obj: this.el[3], transform: { v: "translate(300px, 50px) rotate(0) scale(1.5)", delay: 500, dur: 200, easing: this.wl.glow.ease_out } }, { obj: this.el[7], opacity: { v: 1, dur: 150, delay: 800 } }, { obj: this.el[8], opacity: { v: 1, dur: 150, delay: 450 } }, { obj: this.el[5], opacity: { v: 1, dur: 50, delay: 500 }, transform: { v: "scale(1)" }, transform: { v: "scale(2)", delay: 600 }, transform: { v: "scale(1)", dur: 100, easing: this.wl.glow.overshoot } }).play().await(); } async f5() { await this.wl.glow({ obj: this.el[2], opacity: { v: 0, dur: 300 }, transform: [{ v: `translate(0px,50px) scale(0.5)`, dur: 300, easing: this.wl.glow.anticipate }, { v: `matrix(1,0,0,1,0,0)` }] }, { obj: this.el[3], opacity: { v: 0, delay: 100, dur: 300 }, transform: [{ v: `translate(0px,50px) scale(0.5)`, delay: 100, dur: 300, easing: this.wl.glow.anticipate }, { v: `matrix(1,0,0,1,0,0)` }] }, { obj: this.el[7], opacity: { v: 0, dur: 150 } }, { obj: this.el[8], opacity: { v: 0, dur: 150 } }, { obj: this.el[5], opacity: { v: 0, dur: 50 } }).play().await();
-      this.el[0].style.opacity = 0;
-      this.e({ restart: true }); } });
-  wl.lc("W8A89AD0", wl.gt("W8A89AD0"), class extends wl.sc { constructor(e, wl) { super(e, wl, [0, 0], [0, 1, 0], [0, 1, 1]); const o = this;
-      o.f = [{ o: 7, S: 1, f: o.f1, r: 0, a: 128 }, { o: 8, S: 1, f: o.f2, r: 64, a: 256 }, { o: 1, S: 1, f: o.f3, r: 2, a: 2 }, { o: 5, S: 1, f: o.f4, r: 64, a: 32 }];
-      o.n = ["score", "pogchoice", "pogs", "types", "show_down_start", "restart", "game_type", "loading", "loaded"];
-      o.v = [null, null, null, null, null, null, null, null, null];
-      o.g = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-      o.addScope(wl.cc("W5D23A18", o.el[0]));
-      o.addScope(wl.cc("WD886236", o.el[1]));
-      o.addScope(wl.cc("W66F6E99", o.el[2])); } f1() { this.e({ pogs: [] });
-      this.e({ game_type: [{ type_id: 0, type: "rock", win_map: [0, -1, 1] }, { type_id: 1, type: "paper", win_map: [1, 0, -1] }, { type_id: 2, type: "scissors", win_map: [-1, 1, 0] }] }); } f2() {
-      this.e({ score: 0 });
-      this.e({ pogs: this.v[6] }); } f3() { this.e({ pogs: [] });
-      this.e({ show_down_start: { player_selection: this.v[1] } }); } f4() { this.e({ pogs: this.v[6] }); } })
-  wl.cc("W8A89AD0", document.getElementById("game")).load();
-  </script>
+            <div class="pog-svg">
+            </div>
+        </div>	
+    </div>		
+</div></template><template id="WFBF8D1D"><div class="glow">								
+</div></template><template id="W8D92270"><span class="countdown-word" element="span">			
+    <span></span>					
+</span></template>
+<script>
+wl.lc("W879A7F0", wl.gt("W879A7F0"),class extends wl.sc{constructor(e,wl){super(e,wl,[0,0],[0,0,0],[0,1,1],[0,1,1,0]);const o = this;o.f = [{o : 3,S : 0,f : o.f1,r : 8,a : 8},{o : 1,S : 0,f : o.f2,r : 2,a : 2},{o : 0,S : 0,f : o.f3,r : 1,a : 1}];o.n = ["score","types","game_size","game_type"];o.v = [null,null,null,null];o.g = [1,1,1,1];}f1(){this.e({types : this.v[3]});}f2(){this.el[0].setAttribute("style",this.v[1].length > 3 ? "font-size:2.5em" : "");this.el[1].innerHTML = this.v[1].map(t=>t.kludge).join(" ").toUpperCase();}f3(){this.el[2].setAttribute("style",this.v[0] < 0 ? "color:red" : "");this.el[3].innerHTML = this.v[0];}});
+wl.lc("WE4CCE5D", wl.gt("WE4CCE5D"),class extends wl.sc{constructor(e,wl){super(e,wl,[0]);const o = this;o.f = [{o : 5,S : 1,f : o.f1,r : 28,a : 32},{o : 6,S : 1,f : o.f2,r : 16,a : 64}];o.n = ["type","pogchoice","size","pos","trs","arrange","trs_out"];o.v = [null,null,null,null,null,null,null];o.g = [1,2,1,0,0,0,0];o.e0 = e=>{o.e({click : {event : e}});};o.el[0].addEventListener("click",o.e0);}destroy(){const o = this;o.el[0].removeEventListener("click",o.e0);super.destroy();}f1(){const angle = (Math.PI * 2 / this.v[2]) * this.v[3].row,scale = this.v[2] > 3 ? 0.7 : 0.8,val = angle + ((this.v[2] == 3) ? Math.PI : 0),d = 80 + 100 * scale,d1 = d * 0.8,d2 = d * 0.4,x = Math.round(d * Math.sin(val) * 10000) / 10000,y = Math.round(d * - Math.cos(val) * 10000) / 10000,t = - val - (Math.PI / this.v[2]),delay = (900 / this.v[2]) + 150 * this.v[3].row;this.v[4]({obj : this.el[0],transform : [{v : `translate(${x}px, ${y}px) rotate(${t}}) scale(0,1)`,dur : 0},{delay : delay + 300,v : `scale(${scale}, 1)`,dur : 100,easing : this.wl.glow.linear}]});}f2(){this.v[4]({obj : this.el[0],transform : [{v : `scale(0.1,1)`,dur : 50}]});}});
+wl.lc("W95F2E83", wl.gt("W95F2E83"),class extends wl.sc{constructor(e,wl){super(e,wl,[0]);const o = this;o.f = [{o : 0,S : 0,f : o.f1,r : 1,a : 1},{o : 7,S : 1,f : o.f2,r : 121,a : 128},{o : 8,S : 1,f : o.f3,r : 0,a : 256},{o : 11,S : 1,f : o.f4,r : 1540,a : 2048},{o : 12,S : 1,f : o.f5,r : 1024,a : 4096},{o : 13,S : 1,f : o.f6,r : 1024,a : 8192}];o.n = ["type","pogchoice","size","x","y","type_id","starting_scale","click","loading","pos","trs","arrange","trs_out","trs_out_asc"];o.v = [null,null,null,null,null,null,null,null,null,null,null,null,null,null];o.g = [1,2,1,0,0,0,0,0,0,0,0,0,0,0];o.e0 = e=>{o.e({click : {event : e}});};o.el[0].addEventListener("click",o.e0);}destroy(){const o = this;o.el[0].removeEventListener("click",o.e0);super.destroy();}f1(){this.el[0].setAttribute("class","pog " + this.v[0]);}f2(){this.CHOSEN = true;this.e({pogchoice : {type : this.v[0],x : this.v[3],y : this.v[4],type_id : this.v[5],starting_scale : this.v[6]}});}f3(){this.el[0].style.opacity = 0;}f4(){const angle = (Math.PI * 2 / this.v[2]) * this.v[9].row,scale = this.v[2] > 3 ? 0.7 : 0.8,val = angle + ((this.v[2] == 3) ? Math.PI : 0),d = 80 + 100 * scale,d1 = d * 0.8,d2 = d * 0.4,px = Math.round(d2 * Math.sin(val - 1.2) * 10000) / 10000,py = Math.round(d2 * - Math.cos(val - 1.2) * 10000) / 10000,p1x = Math.round(d1 * Math.sin(val - 0.8) * 10000) / 10000,p1y = Math.round(d1 * - Math.cos(val - 0.8) * 10000) / 10000,p2x = Math.round(d * Math.sin(val) * 10000) / 10000,p2y = Math.round(d * - Math.cos(val) * 10000) / 10000,delay = (900 / this.v[2]) + 100 * this.v[9].row;this.e({x : p2x});this.e({y : p2y});this.e({starting_scale : scale});this.v[10]({obj : this.el[0],opacity : [{v : 0},{delay : delay,v : 1,dur : 200}],transform : [{delay,v : `translate(0px, 50px) scale(${scale * 0.5})`,dur : 0},{v : `translate(${px}px, ${py}px)scale(${scale * 0.5})`,dur : 50,easing : this.wl.glow.linear},{v : `translate(${p1x}px, ${p1y}px)  scale(${scale * 0.6})`,dur : 75,easing : this.wl.glow.linear},{v : `translate(${p2x}px, ${p2y}px)  scale(${scale})`,dur : 500,easing : this.wl.glow.ease_out}]});}f5(){if(this.CHOSEN){{this.CHOSEN = false;this.v[10]({obj : this.el[0],opacity : [{v : 0,dur : 5,delay : 40}]});}} else {this.v[10]({obj : this.el[0],transform : {v : "translate(0px, 50px) scale(0.2)",dur : 300},opacity : [{v : 0,dur : 300}]});}}f6(){if(this.CHOSEN){{this.CHOSEN = false;this.v[10]({obj : this.el[0],opacity : [{v : 0,dur : 5,delay : 40}]});}} else {this.v[10]({obj : this.el[0],transform : {v : "translate(0px, 50px) scale(0.2)",dur : 300},opacity : [{v : 0,dur : 300}]});}}});
+wl.lc("W50F4EEF", wl.gt("W50F4EEF"),class extends wl.sc{constructor(e,wl){super(e,wl,[0,0],[0,1]);const o = this;o.f = [{o : 3,S : 0,f : o.f1,r : 8,a : 8},{o : 1,S : 0,f : o.f2,r : 2,a : 2}];o.n = ["pogchoice","pogs","size","game_size"];o.v = [null,null,null,null];o.g = [2,1,1,1];o.c1 = wl.ctr(o,o.el[0],"WE4CCE5D");o.c2 = wl.ctr(o,o.el[1],"W95F2E83");}destroy(){const o = this;o.c1.destroy();o.c2.destroy();super.destroy();}f1(){this.e({size : this.v[3]});}f2(){this.c1.l(this.v[1]);this.c2.l(this.v[1]);}});
+wl.lc("WFBF8D1D", wl.gt("WFBF8D1D"),class extends wl.sc{constructor(e,wl){super(e,wl,[0]);const o = this;o.f = [{o : 1,S : 1,f : o.f1,r : 1,a : 2},{o : 2,S : 1,f : o.f2,r : 0,a : 4}];o.n = ["pos","arrange","destroying"];o.v = [null,null,null];o.g = [0,0,0];}f1(){this.animation = this.wl.glow({obj : this.el[0],opacity : [{v : 0,dur : 1000},{v : 0.05,dur : 1000},{v : 0,dur : 1000}],transform : [{v : "scale(0.01)",dur : 700,easing : this.wl.glow.ease_in_out},{v : "scale(5)",dur : 2000,easing : this.wl.glow.ease_in_out}]});this.animation.REPEAT = 20;this.animation.play(1,this.v[0].row * 200);}f2(){this.animation.destroy();}});
+wl.lc("W3721E30", wl.gt("W3721E30"),class extends wl.sc{constructor(e,wl){super(e,wl,[0,0]);const o = this;o.f = [{o : 2,S : 0,f : o.f1,r : 4,a : 4},{o : 3,S : 0,f : o.f2,r : 8,a : 8},{o : 4,S : 1,f : o.f3,r : 0,a : 16},{o : 0,S : 1,f : o.f4,r : 0,a : 1},{o : 1,S : 1,f : o.f5,r : 0,a : 2}];o.n = ["start","stp","computer_win","glows","loading"];o.v = [null,null,null,null,null];o.g = [1,1,1,0,0];o.c1 = wl.ctr(o,o.el[0],"WFBF8D1D");}destroy(){const o = this;o.c1.destroy();super.destroy();}f1(){this.e({start : this.v[2]});}f2(){this.c1.l(this.v[3]);}f3(){this.e({glows : []});}f4(){this.e({glows : [1,2,3,4,5]});}f5(){this.e({glows : []});}});
+wl.lc("W802F67F", wl.gt("W802F67F"),class extends wl.sc{constructor(e,wl){super(e,wl,[0]);const o = this;o.f = [{o : 2,S : 0,f : o.f1,r : 4,a : 4},{o : 0,S : 0,f : o.f2,r : 1,a : 1}];o.n = ["type","show_down_start","computer_type"];o.v = [null,null,null];o.g = [1,1,1];}f1(){this.e({type : this.v[2]});}f2(){this.el[0].setAttribute("class","pog " + this.v[0]);}});
+wl.lc("W099DB6D", wl.gt("W099DB6D"),class extends wl.sc{constructor(e,wl){super(e,wl,[0,0]);const o = this;o.f = [{o : 2,S : 0,f : o.f1,r : 4,a : 4},{o : 3,S : 0,f : o.f2,r : 8,a : 8},{o : 4,S : 1,f : o.f3,r : 0,a : 16},{o : 0,S : 1,f : o.f4,r : 0,a : 1},{o : 1,S : 1,f : o.f5,r : 0,a : 2}];o.n = ["start","stp","player_win","glows","loading"];o.v = [null,null,null,null,null];o.g = [1,1,1,0,0];o.c1 = wl.ctr(o,o.el[0],"WFBF8D1D");}destroy(){const o = this;o.c1.destroy();super.destroy();}f1(){this.e({start : this.v[2]});}f2(){this.c1.l(this.v[3]);}f3(){this.e({glows : []});}f4(){this.e({glows : [1,2,3,4,5]});}f5(){this.e({glows : []});}});
+wl.lc("W13AFF58", wl.gt("W13AFF58"),class extends wl.sc{constructor(e,wl){super(e,wl,[0]);const o = this;o.f = [{o : 2,S : 0,f : o.f1,r : 4,a : 4},{o : 0,S : 0,f : o.f2,r : 1,a : 1}];o.n = ["type","show_down_start","player_type"];o.v = [null,null,null];o.g = [1,1,1];}f1(){this.e({type : this.v[2]});}f2(){this.el[0].setAttribute("class","pog " + this.v[0]);}});
+wl.lc("W8D92270", wl.gt("W8D92270"),class extends wl.sc{constructor(e,wl){super(e,wl,[0],[0,0]);const o = this;o.f = [{o : 1,S : 0,f : o.f1,r : 2,a : 2},{o : 4,S : 1,f : o.f2,r : 13,a : 16}];o.n = ["size","type","pos","trs","arrange"];o.v = [null,null,null,null,null];o.g = [1,0,0,0,0];}f1(){this.el[1].innerHTML = this.v[1];}f2(){const delay = this.v[2].row * 1200 / this.v[0];const r = Math.random() * 2 - 1;this.el[0].style.opacity = 0;this.v[3]({obj : this.el[0],opacity : [{v : 0,delay : delay},{v : 1,dur : 600 / this.v[0]},{v : 0,dur : 1}],transform : [{v : `scale(2) rotate(${r})`,dur : 1,easing : this.wl.glow.ease_out,delay},{v : `scale(1)`,dur : 300 / this.v[0],easing : this.wl.glow.linear},{v : `scale(1)`,dur : 900 / this.v[0],easing : this.wl.glow.ease_in}]});}});
+wl.lc("WF629430", wl.gt("WF629430"),class extends wl.sc{constructor(e,wl){super(e,wl,[0,0]);const o = this;o.f = [{o : 2,S : 0,f : o.f1,r : 4,a : 4},{o : 3,S : 1,f : o.f2,r : 0,a : 8},{o : 0,S : 1,f : o.f3,r : 1,a : 1}];o.n = ["anouncement","size","words","loading"];o.v = [null,null,null,null];o.g = [1,1,0,0];o.c1 = wl.ctr(o,o.el[0],"W8D92270");}destroy(){const o = this;o.c1.destroy();super.destroy();}f1(){this.c1.l(this.v[2]);}f2(){this.e({words : ["rock","paper"]});}f3(){this.e({words : this.v[0]});}});
+wl.lc("W9277B44", wl.gt("W9277B44"),class extends wl.sc{constructor(e,wl){super(e,wl,[0],[0,0,0],[0,0,0,0],[0,0,0,1,0],[0,0,0,1,1],[0,0,1,0],[0,0,1,1],[0,0,1,1,0],[0,1],[0,2,0],[0,2,0,0],[0,2,1],[0,3]);const o = this;o.f = [{o : 5,S : 0,f : o.f1,r : 32,a : 32},{o : 6,S : 0,f : o.f2,r : 64,a : 64},{o : 15,S : 0,f : o.f3,r : 32768,a : 32768},{o : 16,S : 1,f : o.f4,r : 0,a : 65536},{o : 1,S : 1,f : o.f5,r : 131093,a : 2},{o : 18,S : 1,f : o.f6,r : 0,a : 262144}];o.n = ["types","show_down_start","size","restart","score","game_size","game_type","start","stp","computer_win","type","computer_type","player_win","player_type","anouncement","result_text","loaded","player_selection","arm_restart"];o.v = [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];o.g = [1,1,1,2,3,1,1,0,0,0,0,0,0,0,0,0,0,0,0];o.e0 = e=>{o.e({arm_restart : {event : e}});};o.el[11].addEventListener("click",o.e0);o.addScope(wl.cc("W3721E30",o.el[2]));o.addScope(wl.cc("W802F67F",o.el[4]));o.addScope(wl.cc("W099DB6D",o.el[5]));o.addScope(wl.cc("W13AFF58",o.el[7]));o.addScope(wl.cc("WF629430",o.el[8]));}destroy(){const o = this;o.el[11].removeEventListener("click",o.e0);super.destroy();}f1(){this.e({size : this.v[5]});}f2(){this.e({types : this.v[6]});}f3(){this.el[10].innerHTML = this.v[15];}f4(){this.el[0].style.display = "none";this.el[0].style.opacity = 0;this.el[7].style.opacity = 0;this.el[4].style.opacity = 0;this.el[11].style.opacity = 0;this.el[9].style.opacity = 0;this.el[12].style.opacity = 0;this.el[3].style.opacity = 0;}async f5(){this.el[0].style.display = "";this.el[0].style.opacity = 1;this.el[7].style.opacity = 0;const oX = parseFloat(window.getComputedStyle(this.el[1])["left"]),oY = parseFloat(window.getComputedStyle(this.el[1])["top"]),oW = parseFloat(window.getComputedStyle(this.el[6])["width"]),index = Math.round(Math.random() * this.v[0].length) % this.v[0].length,computer_selection = this.v[0][index];this.e({player_type : this.v[17].type});this.e({computer_type : computer_selection.type});await this.wl.glow({obj : this.el[7],opacity : {v : 1,dur : 1},transform : [{v : `translate(${this.v[17].x + oX}, ${this.v[17].y - oY}) scale(${this.v[17].starting_scale * 200 / oW}})`,dur : 0},{v : `translate(${oX}, 50px) scale(1)`,dur : 300,easing : this.wl.glow.anticipate},{v : `translate(${(oW * 0.75 - oX) * - 1}px, 50px)`,delay : 100,dur : 300,easing : this.wl.glow.overshoot}]},{obj : this.el[3],opacity : {delay : 10,v : 1,dur : 1},transform : [{v : `translate(${this.v[17].x - oX}, ${this.v[17].y - oY}) scale(${this.v[17].starting_scale * 0.8 * 200 / oW})`,dur : 0},{v : `translate(${- oX}, 50px) scale(1)`,dur : 300,easing : this.wl.glow.anticipate},{v : `translate(${oW * 0.7 - oX}px, 50px)`,delay : 100,dur : 300,easing : this.wl.glow.overshoot}]}).play().await();this.e({anouncement : this.v[0].slice(0,this.v[2])});await this.wl.glow({obj : this.el[3],opacity : {v : 0,delay : 1000},transform : [{v : `scale(0.8)`,delay : 900,dur : 100,easing : this.wl.glow.overshoot}]},{obj : this.el[7],transform : [{v : `translate(${(oW * 1.1 - oX) * - 1}px, 50px) rotate(0.8)`,delay : 1000,dur : 200,easing : this.wl.glow.ease_out},{v : `translate(${(oW * 0.51 - oX) * - 1}px, 50px) rotate(-0.8) scale(1, 1.1)`,delay : 100,dur : 50,easing : this.wl.glow.overshoot}]},{obj : this.el[4],opacity : {v : 1,dur : 1,delay : 1000},transform : [{v : `translate(${oW * 0.7 - oX}px, 50px) scale(0.5)`,delay : 1000,dur : 1},{v : `scale(${1.2})`,dur : 100,easing : this.wl.glow.anticipate},{v : `scale(${1})`,dur : 100,easing : this.wl.glow.overshoot},{v : `translate(${oW * 1.1 - oX}px, 50px) rotate(-0.8)`,delay : 20,dur : 100,easing : this.wl.glow.overshoot},{v : `translate(${oW * 0.51 - oX}px, 50px) rotate(0.8) scale(1, 1.1)`,delay : 100,dur : 50,easing : this.wl.glow.overshoot}]}).play().await();this.e({anouncement : []});this.el[3].style.opacity = 0;switch(computer_selection.win_map[this.v[17].type_id]){case 0:this.e({result_text : "DRAW"});break;case 1:this.e({result_text : "YOU LOSE"});this.e({score : this.v[4] - 1});this.el[7].style.zIndex = 1;this.el[4].style.zIndex = 100;await this.wl.glow({obj : this.el[7],transform : {v : `scale(1.1, 0.9) rotate(0) translate(${(oW * 0.5 - oX) * - 1}px, 80px)`,delay : 300,dur : 200,easing : this.wl.glow.overshoot}},{obj : this.el[4],transform : {v : `scale(1.4)`,delay : 300,dur : 20,easing : this.wl.glow.overshoot}}).play().await();break;case - 1:this.e({result_text : "YOU WIN"});this.e({score : this.v[4] + 1});this.el[7].style.zIndex = 100;this.el[4].style.zIndex = 1;await this.wl.glow({obj : this.el[7],transform : {v : `scale(1.4)`,delay : 300,dur : 20,easing : this.wl.glow.overshoot}},{obj : this.el[4],transform : {v : `scale(1.1, 0.9) rotate(0) translate(${(oW * 0.5 - oX)}px, 80px)`,delay : 300,dur : 200,easing : this.wl.glow.overshoot}}).play().await();break;}await this.wl.glow({obj : this.el[7],transform : {v : `translate(0px, 0px) rotate(0) scale(1)`,delay : 500,dur : 200,easing : this.wl.glow.ease_out}},{obj : this.el[4],transform : {v : `translate(0px, 0px) rotate(0) scale(1)`,delay : 500,dur : 200,easing : this.wl.glow.ease_out}},{obj : this.el[11],opacity : {v : 1,dur : 150,delay : 800}},{obj : this.el[12],opacity : {v : 1,dur : 150,delay : 450}},{obj : this.el[9],opacity : {v : 1,dur : 50,delay : 500},transform : {v : "scale(1)"},transform : {v : "scale(2)",delay : 600},transform : {v : "scale(1)",dur : 100,easing : this.wl.glow.overshoot}}).play().await();switch(computer_selection.win_map[this.v[17].type_id]){case 0:break;case 1:this.e({computer_win : true});break;case - 1:this.e({player_win : true});break;}}async f6(){this.e({stp : true});await this.wl.glow({obj : this.el[7],opacity : {v : 0,dur : 300},transform : [{v : `translate(0px,50px) scale(0.5)`,dur : 300,easing : this.wl.glow.anticipate},{v : `matrix(1,0,0,1,0,0)`}]},{obj : this.el[4],opacity : {v : 0,delay : 100,dur : 300},transform : [{v : `translate(0px,50px) scale(0.5)`,delay : 100,dur : 300,easing : this.wl.glow.anticipate},{v : `matrix(1,0,0,1,0,0)`}]},{obj : this.el[11],opacity : {v : 0,dur : 150}},{obj : this.el[12],opacity : {v : 0,dur : 150}},{obj : this.el[9],opacity : {v : 0,dur : 50}}).play().await();this.el[0].style.display = "none";this.el[0].style.opacity = 0;this.e({restart : true});}});
+wl.lc("W9342563", wl.gt("W9342563"),class extends wl.sc{constructor(e,wl){super(e,wl,[0,0],[0,1],[0,1,0],[0,2],[0,2,0,1],[0,2,0,2],[0,2,0,3]);const o = this;o.f = [{o : 0,S : 0,f : o.f1,r : 1,a : 1},{o : 2,S : 0,f : o.f2,r : 4,a : 4},{o : 3,S : 1,f : o.f3,r : 1,a : 8},{o : 4,S : 1,f : o.f4,r : 0,a : 16},{o : 5,S : 1,f : o.f5,r : 0,a : 32}];o.n = ["game_size","restart","active","toggle_game","on","off"];o.v = [null,null,null,null,null,null];o.g = [3,2,0,0,0,0];o.e0 = e=>{o.e({on : {event : e}});};o.el[0].addEventListener("click",o.e0);o.e0 = e=>{o.e({toggle_game : {event : e}});};o.el[1].addEventListener("click",o.e0);o.e0 = e=>{o.e({off : {event : e}});};o.el[3].addEventListener("click",o.e0);o.e0 = e=>{o.e({off : {event : e}});};o.el[4].addEventListener("click",o.e0);}destroy(){const o = this;o.el[0].removeEventListener("click",o.e0);o.el[1].removeEventListener("click",o.e0);o.el[3].removeEventListener("click",o.e0);o.el[4].removeEventListener("click",o.e0);super.destroy();}f1(){this.el[2].innerHTML = this.v[0] > 3 ? "PLAY RPS" : "PLAY RPSGV";this.el[5].setAttribute("style",this.v[0] == 5 ? "display:block" : "display:none");this.el[6].setAttribute("style",this.v[0] == 3 ? "display:block" : "display:none");}f2(){this.el[3].setAttribute("style",this.v[2] ? "display:flex" : "display:none");}f3(){if(this.v[0] > 3){{this.e({game_size : 3});}} else {{this.e({game_size : 5});}}}f4(){this.e({active : true});}f5(){this.e({active : false});}});
+wl.lc("WAEDD8DF", wl.gt("WAEDD8DF"),class extends wl.sc{constructor(e,wl){super(e,wl,[0,0],[0,1,0],[0,1,1],[0,2]);const o = this;o.f = [{o : 9,S : 1,f : o.f1,r : 0,a : 512},{o : 10,S : 1,f : o.f2,r : 0,a : 1024},{o : 4,S : 1,f : o.f3,r : 16,a : 16},{o : 2,S : 1,f : o.f4,r : 32,a : 4},{o : 8,S : 1,f : o.f5,r : 6148,a : 256}];o.n = ["score","types","game_size","game_type","pogchoice","pogs","size","show_down_start","restart","loading","loaded","game_map_a","game_map_b"];o.v = [null,null,null,null,null,null,null,null,null,null,null,null,null];o.g = [0,0,0,0,0,0,0,0,0,0,0,0,0];o.addScope(wl.cc("W879A7F0",o.el[0]));o.addScope(wl.cc("W50F4EEF",o.el[1]));o.addScope(wl.cc("W9277B44",o.el[2]));o.addScope(wl.cc("W9342563",o.el[3]));}f1(){this.e({pogs : []});this.e({game_map_a : [{type_id : 0,kludge : "rock",type : "rock",win_map : [0,- 1,1,1,- 1]},{type_id : 1,kludge : "paper",type : "paper",win_map : [1,0,- 1,- 1,1]},{type_id : 2,kludge : "scissors",type : "scissors",win_map : [- 1,1,0,1,- 1]}]});this.e({game_map_b : [{kludge : "rock",type_id : 0,type : "scissors",win_map : [0,1,- 1,1,- 1]},{kludge : "paper",type_id : 1,type : "paper",win_map : [1,0,- 1,- 1,1]},{kludge : "scissors",type_id : 2,type : "rock",win_map : [1,- 1,0,1,- 1]},{kludge : "lizard",type_id : 3,type : "lizard",win_map : [- 1,1,- 1,0,1]},{kludge : "spock",type_id : 4,type : "spock",win_map : [1,- 1,1,- 1,0]}]});this.e({game_size : 3});}f2(){this.e({score : 0});this.e({restart : true});}f3(){this.e({pogs : []});this.e({show_down_start : {player_selection : this.v[4]}});}f4(){if(this.v[5].length > 0){{this.e({restart : 0});}}}f5(){this.e({pogs : []});this.e({pogs : (this.v[2] == 3) ? this.v[11] : this.v[12]});this.e({game_type : (this.v[2] == 3) ? this.v[11] : this.v[12]});}})
+wl.cc("WAEDD8DF", document.getElementById("game")).load();
+</script>
 </body>
-
 </html>

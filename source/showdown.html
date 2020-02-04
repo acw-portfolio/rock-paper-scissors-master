@@ -1,170 +1,183 @@
-<import url="./anouncement.html">
-
-<scope class="showdown" import="types show_down_start" component="showdown" pin="sd">
-
+<import url="./anouncement.html" />
+<import url="./glow.html" />
+<scope class="showdown" import="types show_down_start size" component="showdown" pin="sd">
 	<div class="pog-area-adjust">
-		<div class="pog-landing" pin=land></div>
-		<pog pin="pl" import="show_down_start player_type:type"></pog>
-		<pog pin="pc" import="show_down_start computer_type:type"></pog>
+		<div class="pog-anchor-right" pin=anchor>
+			<glow import="computer_win:start stp"/>
+			<div class="pog-anchor-center">
+				<div class="pog-landing" pin=land></div>
+				<pog pin="pc" import="show_down_start computer_type:type"></pog>
+			</div>
+		</div>
+		<div class="pog-anchor-left">
+			<glow import="player_win:start stp"/>
+			<div class="pog-anchor-center" pin=center>
+				<pog pin="pl" import="show_down_start player_type:type"></pog>
+			</div>
+		</div>
 	</div>
-
 	<anouncement></anouncement>
-
-	<div id="result-text" pin=rt>((result_text))</div>
-
-	<a id="restart-button" pin=rb onclick=((arm_restart))>PLAY AGAIN</a>
-
+	<div class=result-area>
+		<div id="result-text" pin=rt>((result_text))</div>
+		<a id="restart-button" pin=rb onclick=((arm_restart))>PLAY AGAIN</a>
+	</div>
 	<div id="identifiers" pin=id>
 		<div>YOU PICKED</div>
 		<div>THE HOUSE PICKED</div>
 	</div>
-
 	<script on=((loaded))>
-		sd$.style.opacity = 0;
-		pl$.style.opacity = 0;
-		pc$.style.opacity = 0;
-		rb$.style.opacity = 0;
-		rt$.style.opacity = 0;
-		id$.style.opacity = 0;
+	sd$.style.display = "none";
+	sd$.style.opacity = 0;
+	pl$.style.opacity = 0;
+	pc$.style.opacity = 0;
+	rb$.style.opacity = 0;
+	rt$.style.opacity = 0;
+	id$.style.opacity = 0;
+	land$.style.opacity = 0;
 	</script>
-	
 	<script on=((show_down_start))>
-		sd$.style.opacity = 1;
-		pl$.style.opacity = 0;
+	sd$.style.display = "";
+	sd$.style.opacity = 1;
+	pl$.style.opacity = 0;
 
-		const index = Math.round(Math.random() * types.length) % types.length;
-		const computer_selection = types[index];
+	const
+		oX = parseFloat(window.getComputedStyle(anchor$)["left"]),
+		oY = parseFloat(window.getComputedStyle(anchor$)["top"]),
+		oW = parseFloat(window.getComputedStyle(center$)["width"]),
+		index = Math.round(Math.random() * types.length) % types.length,
+		computer_selection = types[index];
 
-		player_type = player_selection.type;
-		computer_type = computer_selection.type;
+	player_type = player_selection.type;
+	computer_type = computer_selection.type;
 
-		await glow({
-			obj:pl$,
-			opacity:{v:1,dur:1},
-			transform:[
-				{v:`translate(${player_selection.x}, ${player_selection.y}) scale(1.05)`, dur:0},
-				{v:"translate(0px, 50px) scale(1.5)", dur:300, easing:glow.anticipate },
-				{v:"translate(-200px, 50px)",delay:100, dur:300, easing:glow.overshoot },
+	await glow({
+		obj: pl$,
+		opacity: { v: 1, dur: 1 },
+		transform: [
+			{ v: `translate(${player_selection.x + oX}, ${player_selection.y - oY}) scale(${player_selection.starting_scale * 200/oW}})`, dur: 0 },
+			{ v: `translate(${oX}, 50px) scale(1)`, dur: 300, easing: glow.anticipate },
+			{ v: `translate(${(oW*0.75-oX)*-1}px, 50px)`, delay: 100, dur: 300, easing: glow.overshoot },
 			]
-		},{
-			obj:land$,
-			opacity:{v:1,dur:1},
-			transform:[
-				{v:`translate(${player_selection.x}, ${player_selection.y}) scale(1.05)`, dur:0},
-				{v:"translate(0px, 50px) scale(1.3)", dur:300, easing:glow.anticipate },
-				{v:"translate(200px, 50px)",delay:100, dur:300, easing:glow.overshoot },
+	}, {
+		obj: land$,
+		opacity: { delay: 10, v: 1, dur: 1 },
+		transform: [
+			{ v: `translate(${player_selection.x - oX}, ${player_selection.y - oY}) scale(${player_selection.starting_scale*0.8 * 200/oW})`, dur: 0 },
+			{ v: `translate(${-oX}, 50px) scale(1)`, dur: 300, easing: glow.anticipate },
+			{ v: `translate(${oW*0.70-oX}px, 50px)`, delay: 100, dur: 300, easing: glow.overshoot },
 			]
-		}).play().await();
+	}).play().await();
 
-		//anouncement_duration = 800;
-		anouncement = types;
+	anouncement = types.slice(0, size);
 
-		await glow({
-			obj:land$,
-			opacity:{v:0,delay:1000},
-			transform:[
-				{v:"scale(1.0)",delay:900, dur:100, easing:glow.overshoot }
+	await glow({
+		obj: land$,
+		opacity: { v: 0, delay: 1000 },
+		transform: [
+			{ v: `scale(0.8)`, delay: 900, dur: 100, easing: glow.overshoot }
 			]
-		},{
-			obj:pl$,
-			transform:[
-				{v:"translate(-280px, 50px) rotate(0.8)", delay:1000, dur:200, easing:glow.ease_out },
-				{v:"translate(-145px, 50px) rotate(-0.8) scale(1.4, 1.5)", delay:100, dur:50, easing:glow.overshoot }	
+	}, {
+		obj: pl$,
+		transform: [
+			{ v: `translate(${(oW*1.1-oX)*-1}px, 50px) rotate(0.8)`, delay: 1000, dur: 200, easing: glow.ease_out },
+			{ v: `translate(${(oW*0.51-oX)*-1}px, 50px) rotate(-0.8) scale(1, 1.1)`, delay: 100, dur: 50, easing: glow.overshoot }
 				]
-		},{
-			obj:pc$,
-			opacity:{v:1,dur:1, delay:1000},
-			transform:[
-				{v:"translate(200px, 50px) scale(1)", delay:1000, dur:1 },
-				{v:"scale(1.8)", dur:100, easing:glow.anticipate },
-				{v:`scale(1.5)`, dur:100, easing:glow.overshoot },
-				{v:"translate(300px, 50px) rotate(-0.8)",delay:20, dur:100, easing:glow.overshoot },
-				//Shot
-				{v:"translate(145px, 50px) rotate(0.8) scale(1.4, 1.5)", delay:100, dur:50, easing:glow.overshoot }
+	}, {
+		obj: pc$,
+		opacity: { v: 1, dur: 1, delay: 1000 },
+		transform: [
+			{ v: `translate(${oW*0.70-oX}px, 50px) scale(0.5)`, delay: 1000, dur: 1 },
+			{ v: `scale(${1.2})`, dur: 100, easing: glow.anticipate },
+			{ v: `scale(${1})`, dur: 100, easing: glow.overshoot },
+			{ v: `translate(${oW*1.1-oX}px, 50px) rotate(-0.8)`, delay: 20, dur: 100, easing: glow.overshoot },
+			{ v: `translate(${oW*0.51-oX}px, 50px) rotate(0.8) scale(1, 1.1)`, delay: 100, dur: 50, easing: glow.overshoot }
 			]
-		}).play().await();
+	}).play().await();
 
-		//Reset anouncement object;
-		anouncement = [];
+	//Reset anouncement object;
+	anouncement = [];
 
-		land$.style.opacity = 0;
+	land$.style.opacity = 0
 
-		switch(computer_selection.win_map[player_selection.type_id]){
-			case 0:
-				result_text = "A DRAW";
+	switch (computer_selection.win_map[player_selection.type_id]) {
+		case 0:
+			result_text = "DRAW";
 			break;
-			case 1: //Computer WIN
-				result_text = "YOU LOSE";
-				score = score - 1;
-				pl$.style.zIndex = 1;
-				pc$.style.zIndex = 100;
-				await glow({
-					obj:pl$,
-					transform:{v:"scale(1.5, 1.2) rotate(0) translate(-150px, 80px)", delay:300, dur:200, easing:glow.overshoot }
-				},{
-					obj:pc$,
-					transform:{v:"scale(1.8)", delay:300, dur:20, easing:glow.overshoot }
-				}).play().await();
+		case 1: //Computer WIN
+			result_text = "YOU LOSE";
+			score = score - 1;
+			pl$.style.zIndex = 1;
+			pc$.style.zIndex = 100;
+			await glow({
+				obj: pl$,
+				transform: { v: `scale(1.1, 0.9) rotate(0) translate(${(oW*0.5-oX)*-1}px, 80px)`, delay: 300, dur: 200, easing: glow.overshoot }
+			}, {
+				obj: pc$,
+				transform: { v: `scale(1.4)`, delay: 300, dur: 20, easing: glow.overshoot }
+			}).play().await();
 			break;
-			case -1: //Computer LOSS
-				result_text = "YOU WIN";
-				score = score + 1;
-				pl$.style.zIndex = 100;
-				pc$.style.zIndex = 1;
-				await glow({
-					obj:pl$,
-					transform:{v:"scale(1.8)", delay:300, dur:20, easing:glow.overshoot }
-				},{
-					obj:pc$,
-					transform:{v:"scale(1.5, 1.2) rotate(0) translate(150px, 80px)", delay:300, dur:200, easing:glow.overshoot }
-				}).play().await();
+		case -1: //Computer LOSS
+			result_text = "YOU WIN";
+			score = score + 1;
+			pl$.style.zIndex = 100;
+			pc$.style.zIndex = 1;
+			await glow({
+				obj: pl$,
+				transform: { v: `scale(1.4)`, delay: 300, dur: 20, easing: glow.overshoot }
+			}, {
+				obj: pc$,
+				transform: { v: `scale(1.1, 0.9) rotate(0) translate(${(oW*0.5-oX)}px, 80px)`, delay: 300, dur: 200, easing: glow.overshoot }
+			}).play().await();
 			break;
-		}
+	}
 
-		await glow({
-					obj:pl$,
-					transform:{v:"translate(-300px, 50px) rotate(0) scale(1.5)", delay:500, dur:200, easing:glow.ease_out }
-				},{
-					obj:pc$,
-					transform:{v:"translate(300px, 50px) rotate(0) scale(1.5)", delay:500, dur:200, easing:glow.ease_out }
-				},{
-					obj:rb$,
-					opacity:{v:1,dur:150,delay:800}
+	await glow({
+		obj: pl$,
+		transform: { v: `translate(0px, 0px) rotate(0) scale(1)`, delay: 500, dur: 200, easing: glow.ease_out }
+	}, {
+		obj: pc$,
+		transform: { v: `translate(0px, 0px) rotate(0) scale(1)`, delay: 500, dur: 200, easing: glow.ease_out }
+	}, {
+		obj: rb$,
+		opacity: { v: 1, dur: 150, delay: 800 }
 
-				},{
-					obj:id$,
-					opacity:{v:1,dur:150,delay:450}
-				}
-				,{
-					obj:rt$,
-					opacity:{v:1,dur:50,delay:500},
-					transform:{v:"scale(1)"},
-					transform:{v:"scale(2)", delay:600 },
-					transform:{v:"scale(1)", dur:100, easing:glow.overshoot }
-				}).play().await();
+	}, {
+		obj: id$,
+		opacity: { v: 1, dur: 150, delay: 450 }
+	}, {
+		obj: rt$,
+		opacity: { v: 1, dur: 50, delay: 500 },
+		transform: { v: "scale(1)" },
+		transform: { v: "scale(2)", delay: 600 },
+		transform: { v: "scale(1)", dur: 100, easing: glow.overshoot }
+	}).play().await();
 
-		//await spark.
-
-		
+	switch (computer_selection.win_map[player_selection.type_id]) {
+		case 0:
+			break;
+		case 1: //Computer WIN
+			computer_win = true;
+			break;
+		case -1: //Computer LOSS
+			player_win = true;
+			break;
+	}
 	</script>
-	
+
 	<script on=((arm_restart))>
-
-		await glow({
-			obj:pl$,
-			opacity:{v:0, dur:300},
-			transform:[{v:`translate(0px,50px) scale(0.5)`, dur:300, easing:glow.anticipate},{v:`matrix(1,0,0,1,0,0)`}]
-		},{
-			obj:pc$,
-			opacity:{v:0, delay:100, dur:300},
-			transform:[{v:`translate(0px,50px) scale(0.5)`, delay:100, dur:300, easing:glow.anticipate},{v:`matrix(1,0,0,1,0,0)`}]
-		},{			obj:rb$,			opacity:{v:0,dur:150}		},
-		{			obj:id$,			opacity:{v:0,dur:150}		},
-		{			obj:rt$,			opacity:{v:0,dur:50},		})
+	stp = true;
+	await glow({
+			obj: pl$,
+			opacity: { v: 0, dur: 300 },
+			transform: [{ v: `translate(0px,50px) scale(0.5)`, dur: 300, easing: glow.anticipate }, { v: `matrix(1,0,0,1,0,0)` }]
+		}, {
+			obj: pc$,
+			opacity: { v: 0, delay: 100, dur: 300 },
+			transform: [{ v: `translate(0px,50px) scale(0.5)`, delay: 100, dur: 300, easing: glow.anticipate }, { v: `matrix(1,0,0,1,0,0)` }]
+		}, { obj: rb$, opacity: { v: 0, dur: 150 } }, { obj: id$, opacity: { v: 0, dur: 150 } }, { obj: rt$, opacity: { v: 0, dur: 50 }, })
 		.play().await();
-
-		sd$.style.opacity = 0;
-
-		restart = true;
+	sd$.style.display = "none";
+	sd$.style.opacity = 0;
+	restart = true;
 	</script>
 </scope>

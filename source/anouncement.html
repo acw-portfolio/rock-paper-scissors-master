@@ -1,20 +1,20 @@
-<scope class="anouncement" import="anouncement duration" component="anouncement">
+<scope class="anouncement" import="anouncement size" component="anouncement">
 	<container element="div">
 		<filter scrub=((l))/>
 		((words))
-		<scope class="countdown-word" pin="d" element="span">
+		<scope class="countdown-word" import=size pin="d" element="span">
 			((type))
 			<script on=((arrange))>
-				const delay = pos.row * 400;
+				const delay = pos.row * 1200/size;
 				const r = Math.random() * 2 - 1;
 				d$.style.opacity = 0;
 				trs({
 					obj: d$,
-					opacity: [{v:0, delay: delay}, {v:1, dur:200}, {v:0, dur:1}],
+					opacity: [{v:0, delay: delay}, {v:1, dur:600/size}, {v:0, dur:1}],
 					transform: [
-						{ v: `scale(2) rotate(${r})`, dur: 20, easing: glow.ease_out, delay },
-						{ v: `scale(1)`, dur: 100, easing: glow.linear },
-						{ v: `scale(1)`, dur: 300, easing: glow.ease_in }
+						{ v: `scale(2) rotate(${r})`, dur: 1, easing: glow.ease_out, delay },
+						{ v: `scale(1)`, dur: 300/size, easing: glow.linear },
+						{ v: `scale(1)`, dur: 900/size, easing: glow.ease_in }
 					]
 				})
 			</script>

@@ -1,0 +1,37 @@
+<scope component="glow" import="start stp">
+
+	<script on=((loading))>
+		glows = [];
+	</script>
+
+	<script on=((start))>
+		glows = [1,2,3,4,5];
+	</script>
+
+	<script on=((stp))>
+		glows = [];
+	</script>
+
+	<container element=div>
+		((glows))
+		<scope class="glow" pin=body>
+			<script on=((arrange))>
+				this.animation = glow({
+					obj:body$,
+					opacity:[{v:0,dur:1000},{v:0.05, dur:1000}, {v:0,dur:1000}],
+					transform:[
+						{v:"scale(0.01)", dur:700, easing: glow.ease_in_out},
+						{v:"scale(5)", dur:2000, easing: glow.ease_in_out}
+					]
+				})
+
+				this.animation.REPEAT = 20;
+				this.animation.play(1, pos.row * 200);
+			</script>
+
+			<script on=((destroying))>
+				this.animation.destroy();
+			</script>
+		</scope>
+	</container>
+</scope>

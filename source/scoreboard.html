@@ -1,11 +1,12 @@
-<scope class="scoreboard" component="scoreboard" import="score">
+<scope class="scoreboard" component="scoreboard" import="score types game_size">
 	
-	<div id="game-type">
-		ROCK PAPER SCISSORS
+	<div id="game-type" style=((types.length > 3 ? "font-size:2.5em" :""))>
+		(( types.map(t=>t.kludge).join(" ").toUpperCase() ))
 	</div>
 
 	<div id="score">
 		<div id="score-text">SCORE</div>
 		<span id="score-integer" style=(( score < 0 ? "color:red" : ""))>((score))</span>
 	</div>
+
 </scope>

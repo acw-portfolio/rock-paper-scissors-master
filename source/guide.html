@@ -1,0 +1,36 @@
+<scope component=guide class=guide import=game_size export="game_size restart">
+
+	<button id="guide-button" onclick=((on))>RULES</button>
+
+	<button id="game-type-button" onclick=((toggle_game))>(( game_size > 3 ? "PLAY RPS" : "PLAY RPSGV"))</button>
+
+	<script on=((toggle_game))>
+		if(game_size > 3)
+			game_size = 3;
+		else
+			game_size = 5;
+	</script>
+
+	<script on=((on))>
+		active = true;
+	</script>
+
+	<script on=((off))>
+		active = false;
+	</script>
+
+	<div id="guide-modal" style="((active ? 'display:flex' : 'display:none'))" onclick=((off)) >
+		<div id="guide-frame" >
+			<h2 id="guide-label">RULES</h2>
+			<div id="guide-close-button" onclick=((off))>
+				<svg  url="/images/icon-close.svg"></svg>
+			</div>
+			<div style=((game_size == 5 ? "display:block" : "display:none")) >
+				<svg url="/images/image-rules-bonus.svg"></svg>
+			</div>
+			<div style=((game_size == 3 ? "display:block" : "display:none")) >
+				<svg url="/images/image-rules.svg"></svg>
+			</div>
+		</div>
+	</div>
+</scope>
