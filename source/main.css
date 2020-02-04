@@ -354,7 +354,7 @@
   }
 
   .pog.scissors .pog-svg {
-    background-image: url(/images/icon-scissors.svg);
+    background-image: url(./images/icon-scissors.svg);
   }
 
   .pog.paper .pog-base-color {
@@ -366,7 +366,7 @@
   }
 
   .pog.paper .pog-svg {
-    background-image: url(/images/icon-paper.svg);
+    background-image: url(./images/icon-paper.svg);
   }
 
   .pog.rock .pog-base-color {
@@ -378,7 +378,7 @@
   }
 
   .pog.rock .pog-svg {
-    background-image: url(/images/icon-rock.svg);
+    background-image: url(./images/icon-rock.svg);
   }
 
   .pog.spock .pog-base-color {
@@ -390,7 +390,7 @@
   }
 
   .pog.spock .pog-svg {
-    background-image: url(/images/icon-spock.svg);
+    background-image: url(./images/icon-spock.svg);
   }
 
   .pog.lizard .pog-base-color {
@@ -402,7 +402,7 @@
   }
 
   .pog.lizard .pog-svg {
-    background-image: url(/images/icon-lizard.svg);
+    background-image: url(./images/icon-lizard.svg);
   }
 
   /** Guide **/
